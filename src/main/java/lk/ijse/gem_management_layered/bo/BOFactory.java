@@ -8,8 +8,8 @@ public class BOFactory {
 
     private BOFactory() {}
 
-    public static BOFactory getInstance() {
-        if (boFactory == null) {
+    public static BOFactory getInstance(){
+        if(boFactory == null){
             boFactory = new BOFactory();
         }
         return boFactory;
@@ -19,16 +19,17 @@ public class BOFactory {
     public enum BOType {
         GEM,
         GEM_CUTTER,
+        CUSTOMER,
         ORDERS,
         SALES,
-        CUSTOMER,
         STOCK,
-        SUPPLIERS
+        SUPPLIERS,
+        USER
     }
 
-    // Method to get BO object
-    public Object getBO(BOType type) {
-        switch (type) {
+    // Return BO instance based on type
+    public Object getBO(BOType type){
+        switch (type){
             case GEM:
                 return new GemBOImpl();
             case GEM_CUTTER:
@@ -43,6 +44,7 @@ public class BOFactory {
                 return new StockBOImpl();
             case SUPPLIERS:
                 return new SuppliersBOImpl();
+
             default:
                 return null;
         }

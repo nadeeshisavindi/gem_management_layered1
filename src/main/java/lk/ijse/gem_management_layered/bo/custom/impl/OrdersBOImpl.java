@@ -1,41 +1,39 @@
 package lk.ijse.gem_management_layered.bo.custom.impl;
 
-
 import lk.ijse.gem_management_layered.bo.custom.OrdersBO;
-import lk.ijse.gem_management_layered.dao.DAOFactory;
 import lk.ijse.gem_management_layered.dao.custom.OrdersDAO;
+import lk.ijse.gem_management_layered.dao.custom.impl.OrdersDAOImpl;
 import lk.ijse.gem_management_layered.dto.OrdersDTO;
+import lk.ijse.gem_management_layered.dto.OrdersTableDTO;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class OrdersBOImpl implements OrdersBO {
 
-        private final OrdersDAO ordersDAO = (OrdersDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.ORDERS);
+    private final OrdersDAO ordersDAO = new OrdersDAOImpl();
 
-        @Override
-        public boolean saveOrder(OrdersDTO order) throws SQLException, ClassNotFoundException {
-            return ordersDAO.save(order);
-        }
+    @Override
+    public List<OrdersTableDTO> getAllOrders() throws Exception {
+        return ordersDAO.getAllOrders();
+    }
 
-        @Override
-        public boolean updateOrder(OrdersDTO order) throws SQLException, ClassNotFoundException {
-            return ordersDAO.update(order);
-        }
+    @Override
+    public void saveOrder(OrdersDTO order) throws Exception {
+        ordersDAO.saveOrder(order);
+    }
 
-        @Override
-        public boolean deleteOrder(int orderId) throws SQLException, ClassNotFoundException {
-            return ordersDAO.delete(orderId);
-        }
+    @Override
+    public OrdersDTO searchOrder(int orderId) throws Exception {
+        return ordersDAO.searchOrder(orderId);
+    }
 
-        @Override
-        public OrdersDTO searchOrder(int orderId) throws SQLException, ClassNotFoundException {
-            return ordersDAO.search(orderId);
-        }
+    @Override
+    public void updateOrder(OrdersDTO order) throws Exception {
+        ordersDAO.updateOrder(order);
+    }
 
-        @Override
-        public List<OrdersDTO> getAllOrders() throws SQLException, ClassNotFoundException {
-            return ordersDAO.getAll();
-        }
-
+    @Override
+    public void deleteOrder(int orderId) throws Exception {
+        ordersDAO.deleteOrder(orderId);
+    }
 }

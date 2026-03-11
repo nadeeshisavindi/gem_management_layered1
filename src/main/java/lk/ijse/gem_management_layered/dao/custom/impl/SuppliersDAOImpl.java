@@ -11,66 +11,59 @@ import java.util.List;
 
 public class SuppliersDAOImpl implements SuppliersDAO {
 
-        @Override
-        public boolean save(Suppliers suppliers) throws SQLException {
-            return CRUDUtill.execute(
-                    "INSERT INTO Suppliers (name, address, contact) VALUES (?,?,?)",
-                    suppliers.getName(),
-                    suppliers.getAddress(),
-                    suppliers.getContact()
+    @Override
+    public boolean save(Suppliers supplier) throws SQLException, ClassNotFoundException {
+        return  CRUDUtill.execute(
+                "INSERT INTO Suppliers (name, address, contact) VALUES (?,?,?)",
+                supplier.getName(), supplier.getAddress(), supplier.getContact()
+        );
+    }
+
+    @Override
+    public boolean update(Suppliers supplier) throws SQLException, ClassNotFoundException {
+        return CRUDUtill.execute(
+                "UPDATE Suppliers SET name=?, address=?, contact=? WHERE supplier_id=?",
+                supplier.getName(), supplier.getAddress(), supplier.getContact(), supplier.getId()
+        );
+    }
+
+    @Override
+    public boolean delete(int id) throws SQLException, ClassNotFoundException {
+        return CRUDUtill.execute(
+                "DELETE FROM Suppliers WHERE supplier_id=?",
+                id
+        );
+    }
+
+    @Override
+    public Suppliers search(int id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = CRUDUtill.executeQuery(
+                "SELECT * FROM Suppliers WHERE supplier_id=?",
+                id
+        );
+        if (rs.next()) {
+            return new Suppliers(
+                    rs.getInt("supplier_id"),
+                    rs.getString("name"),
+                    rs.getString("address"),
+                    rs.getInt("contact")
             );
         }
+        return null;
+    }
 
-        @Override
-        public boolean update(Suppliers suppliers) throws SQLException {
-            return CRUDUtill.execute(
-                    "UPDATE Suppliers SET name=?, address=?, contact=? WHERE supplier_id=?",
-                    suppliers.getName(),
-                    suppliers.getAddress(),
-                    suppliers.getContact(),
-                    suppliers.getSupplierId()
-            );
+    @Override
+    public List<Suppliers> getAll() throws SQLException, ClassNotFoundException {
+        ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM Suppliers ORDER BY supplier_id");
+        List<Suppliers> list = new ArrayList<>();
+        while (rs.next()) {
+            list.add(new Suppliers(
+                    rs.getInt("supplier_id"),
+                    rs.getString("name"),
+                    rs.getString("address"),
+                    rs.getInt("contact")
+            ));
         }
-
-        @Override
-        public boolean delete(int supplierId) throws SQLException, ClassNotFoundException {
-            return CRUDUtill.execute(
-                    "DELETE FROM Suppliers WHERE supplier_id=?",
-                    supplierId
-            );
-        }
-
-        @Override
-        public Suppliers search(int supplierId) throws SQLException {
-            ResultSet rs = CRUDUtill.executeQuery(
-                    "SELECT * FROM Suppliers WHERE supplier_id=?",
-                    supplierId
-            );
-
-            if(rs.next()){
-                return new Suppliers(
-                        rs.getInt("supplier_id"),
-                        rs.getString("name"),
-                        rs.getString("address"),
-                        rs.getInt("contact")
-                );
-            }
-            return null;
-        }
-
-        @Override
-        public List<Suppliers> getAll() throws SQLException {
-            ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM Suppliers ORDER BY supplier_id", username, password);
-            List<Suppliers> list = new ArrayList<>();
-            while(rs.next()){
-                list.add(new Suppliers(
-                        rs.getInt("supplier_id"),
-                        rs.getString("name"),
-                        rs.getString("address"),
-                        rs.getInt("contact")
-                ));
-            }
-            return list;
-        }
-
+        return list;
+    }
 }

@@ -1,26 +1,25 @@
 package lk.ijse.gem_management_layered.util;
+
+import lk.ijse.gem_management_layered.dto.UserDTO;
 import lk.ijse.gem_management_layered.dto.UserDTO;
 
- public class UserSession {
+public class UserSession {
 
-        private static UserDTO loggedUser;
+    private static UserDTO loggedUser;
 
-        public static void setUser(UserDTO user) {
+    // Set currently logged-in user
+    public static void setUser(UserDTO user) {
+        loggedUser = user;
+    }
 
-            loggedUser = user;
+    // Get currently logged-in user
+    public static UserDTO getUser() {
+        return loggedUser;
+    }
 
-        }
-
-        public static UserDTO getUser() {
-
-            return loggedUser;
-
-        }
-
-        public static void clear() {
-
-            loggedUser = null;
-
-        }
+    // Clear session
+    public static void clear() {
+        loggedUser = null;
+    }
 
 }

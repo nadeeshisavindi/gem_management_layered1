@@ -1,7 +1,6 @@
 package lk.ijse.gem_management_layered.dao.custom.impl;
 
 import lk.ijse.gem_management_layered.dao.custom.SalesDAO;
-import lk.ijse.gem_management_layered.entity.Gem;
 import lk.ijse.gem_management_layered.entity.Sales;
 import lk.ijse.gem_management_layered.util.CRUDUtill;
 
@@ -14,53 +13,41 @@ public class SalesDAOImpl implements SalesDAO {
 
     @Override
     public boolean save(Sales sale) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO Sales (cancel, update_info, return_info) VALUES (?,?,?)";
-        return CRUDUtill.execute(sql, sale.getCancel(), sale.getUpdateInfo(), sale.getReturnInfo());
+        return CRUDUtill.execute(
+                "INSERT INTO Sales (order_id, customer_name, order_status) VALUES (?,?,?)",
+                sale.getOrderId(), sale.getCustomerName(), sale.getOrderStatus()
+        );
     }
+
 
     @Override
     public boolean update(Sales sale) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE Sales SET cancel=?, update_info=?, return_info=? WHERE sale_id=?";
-        return CRUDUtill.execute(sql, sale.getCancel(), sale.getUpdateInfo(), sale.getReturnInfo(), sale.getSaleId());
+        return CRUDUtill.execute(
+                "UPDATE Sales SET order_id=?, customer_name=?, order_status=? WHERE sale_id=?",
+                sale.getOrderId(), sale.getCustomerName(), sale.getOrderStatus(), sale.getSaleId()
+        );
     }
 
     @Override
-    public boolean delete(String id) throws SQLException, ClassNotFoundException {
-        return false;
+    public boolean delete(int saleId) throws SQLException, ClassNotFoundException {
+        return CRUDUtill.execute(
+                "DELETE FROM Sales WHERE sale_id=?",
+                saleId
+        );
     }
 
     @Override
-    public Gem search(String id) throws SQLException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
-    public boolean delete(Integer id) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public Sales search(Integer id) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public boolean delete(int id) throws SQLException, ClassNotFoundException {
-        String sql = "DELETE FROM Sales WHERE sale_id=?";
-        return CRUDUtill.execute(sql, id);
-    }
-
-    @Override
-    public Sales search(int id) throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM Sales WHERE sale_id=?";
-        ResultSet rs = CRUDUtill.executeQuery(sql, id);
-
+    public Sales search(int saleId) throws SQLException, ClassNotFoundException {
+        ResultSet rs = CRUDUtill.executeQuery(
+                "SELECT * FROM Sales WHERE sale_id=?",
+                saleId
+        );
         if (rs.next()) {
             return new Sales(
                     rs.getInt("sale_id"),
-                    rs.getInt("cancel"),
-                    rs.getString("update_info"),
-                    rs.getString("return_info")
+                    rs.getInt("order_id"),
+                    rs.getString("customer_name"),
+                    rs.getString("order_status")
             );
         }
         return null;
@@ -68,16 +55,14 @@ public class SalesDAOImpl implements SalesDAO {
 
     @Override
     public List<Sales> getAll() throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM Sales";
-        ResultSet rs = CRUDUtill.executeQuery(sql);
-
+        ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM Sales ORDER BY sale_id");
         List<Sales> list = new ArrayList<>();
         while (rs.next()) {
             list.add(new Sales(
                     rs.getInt("sale_id"),
-                    rs.getInt("cancel"),
-                    rs.getString("update_info"),
-                    rs.getString("return_info")
+                    rs.getInt("order_id"),
+                    rs.getString("customer_name"),
+                    rs.getString("order_status")
             ));
         }
         return list;

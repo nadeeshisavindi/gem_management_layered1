@@ -6,13 +6,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface SuppliersDAO {
-    boolean save(Suppliers suppliers) throws SQLException;
-
-    boolean update(Suppliers suppliers) throws SQLException;
-
-    boolean delete(int supplierId) throws SQLException, ClassNotFoundException;
-
-    Suppliers search(int supplierId) throws SQLException;
-
-    List<Suppliers> getAll() throws SQLException;
+    boolean save(Suppliers supplier) throws SQLException, ClassNotFoundException;
+    boolean update(Suppliers supplier) throws SQLException, ClassNotFoundException;
+    boolean delete(int id) throws SQLException, ClassNotFoundException;
+    Suppliers search(int id) throws SQLException, ClassNotFoundException;
+    List<Suppliers> getAll() throws SQLException, ClassNotFoundException;
 }

@@ -1,201 +1,181 @@
 package lk.ijse.gem_management_layered.controller;
 
-
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lk.ijse.gem_management_layered.bo.BOFactory;
 import lk.ijse.gem_management_layered.bo.custom.GemBO;
 import lk.ijse.gem_management_layered.dto.GemDTO;
 
+import java.sql.SQLException;
 import java.util.List;
-
-
-
 
 public class GemController {
 
-        @FXML private TextField gemid;
-        @FXML private TextField gemname;
-        @FXML private TextField type;
+    @FXML private TextField txtGemId;
+    @FXML private TextField txtGemName;
+    @FXML private TextField txtType;
 
-        @FXML private TableView<GemDTO> tablegem;
-        @FXML private TableColumn<GemDTO, Integer> colgemid;
-        @FXML private TableColumn<GemDTO, String> colgemname;
-        @FXML private TableColumn<GemDTO, String> coltype;
+    @FXML private TableView<GemDTO> tableGem;
+    @FXML private TableColumn<GemDTO, Integer> colGemId;
+    @FXML private TableColumn<GemDTO, String> colGemName;
+    @FXML private TableColumn<GemDTO, String> colType;
 
-        // Use BO layer
-        private final GemBO gemBO = (GemBO) BOFactory.getInstance().getBO(BOFactory.BOType.GEM);
+    private final GemBO gemBO = (GemBO) BOFactory.getInstance().getBO(BOFactory.BOType.GEM);
 
-        @FXML
-        public void initialize() {
-            colgemid.setCellValueFactory(new PropertyValueFactory<>("gemId"));
-            colgemname.setCellValueFactory(new PropertyValueFactory<>("gemName"));
-            coltype.setCellValueFactory(new PropertyValueFactory<>("type"));
+    @FXML
+    public void initialize() {
+        colGemId.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getGemId()).asObject());
+        colGemName.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getGemName()));
+        colType.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getType()));
 
-            loadGemTable();
-            setTableClickListener();
-        }
+        loadGemTable();
+        setTableClickListener();
+    }
 
-        // SAVE
-        @FXML
-        public void gemSave(ActionEvent event) {
-            try {
-                if (!isValidForSave()) return;
+    @FXML
+    void saveGem(ActionEvent event) {
+        try {
+            if(!isValidForSave()) return;
 
-                GemDTO dto = new GemDTO(0, gemname.getText().trim(), type.getText().trim());
+            GemDTO dto = new GemDTO(
+                    0,
+                    txtGemName.getText().trim(),
+                    txtType.getText().trim()
+            );
 
-                if (gemBO.saveGem(dto)) {
-                    showAlert(Alert.AlertType.INFORMATION, "Gem Saved Successfully!");
-                    clearFields();
-                    loadGemTable();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Failed to save gem");
+            if(gemBO.saveGem(dto)){
+                showAlert(Alert.AlertType.INFORMATION, "Gem Saved Successfully!");
+                clearFields();
+                loadGemTable();
             }
+
+        } catch (SQLException | ClassNotFoundException e){
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
         }
+    }
 
-        // UPDATE
-        @FXML
-        public void gemUpdate(ActionEvent event) {
-            try {
-                if (!isValidForUpdate()) return;
+    @FXML
+    void updateGem(ActionEvent event){
+        try {
+            if(!isValidForUpdate()) return;
 
-                GemDTO dto = new GemDTO(Integer.parseInt(gemid.getText()), gemname.getText().trim(), type.getText().trim());
+            GemDTO dto = new GemDTO(
+                    Integer.parseInt(txtGemId.getText()),
+                    txtGemName.getText().trim(),
+                    txtType.getText().trim()
+            );
 
-                if (gemBO.updateGem(dto)) {
-                    showAlert(Alert.AlertType.INFORMATION, "Gem Updated Successfully!");
-                    clearFields();
-                    loadGemTable();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Failed to update gem");
+            if(gemBO.updateGem(dto)){
+                showAlert(Alert.AlertType.INFORMATION,"Gem Updated Successfully!");
+                clearFields();
+                loadGemTable();
             }
-        }
 
-        // DELETE
-        @FXML
-        public void gemDelete(ActionEvent event) {
+        } catch (SQLException | ClassNotFoundException e){
+            showAlert(Alert.AlertType.ERROR,e.getMessage());
+        }
+    }
+
+    @FXML
+    void deleteGem(ActionEvent event){
+        try {
+            if(txtGemId.getText().isEmpty() || !txtGemId.getText().matches("\\d+")){
+                showAlert(Alert.AlertType.ERROR,"Enter a valid Gem ID");
+                txtGemId.requestFocus();
+                return;
+            }
+
+            if(gemBO.deleteGem(txtGemId.getText())){
+                showAlert(Alert.AlertType.INFORMATION,"Gem Deleted Successfully!");
+                clearFields();
+                loadGemTable();
+            }
+
+        } catch (SQLException | ClassNotFoundException e){
+            showAlert(Alert.AlertType.ERROR,e.getMessage());
+        }
+    }
+
+    @FXML
+    void searchGem(KeyEvent event){
+        if(event.getCode() == KeyCode.ENTER){
             try {
-                if (gemid.getText().isEmpty() || !gemid.getText().matches("\\d+")) {
-                    showAlert(Alert.AlertType.ERROR, "Enter a valid Gem ID to delete");
-                    gemid.requestFocus();
+                if(txtGemId.getText().isEmpty() || !txtGemId.getText().matches("\\d+")){
+                    showAlert(Alert.AlertType.ERROR,"Enter valid Gem ID");
                     return;
                 }
 
-                if (gemBO.deleteGem(String.valueOf(Integer.parseInt(gemid.getText())))) {
-                    showAlert(Alert.AlertType.INFORMATION, "Gem Deleted Successfully!");
-                    clearFields();
-                    loadGemTable();
+                GemDTO dto = gemBO.searchGem(txtGemId.getText());
+                if(dto != null){
+                    txtGemName.setText(dto.getGemName());
+                    txtType.setText(dto.getType());
+                } else {
+                    showAlert(Alert.AlertType.INFORMATION,"Gem Not Found!");
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Failed to delete gem");
+            } catch (SQLException | ClassNotFoundException e){
+                showAlert(Alert.AlertType.ERROR,e.getMessage());
             }
         }
+    }
 
-        // SEARCH
-        @FXML
-        public void searchGem(KeyEvent event) {
-            if (event.getCode() == KeyCode.ENTER) {
-                try {
-                    if (gemid.getText().isEmpty() || !gemid.getText().matches("\\d+")) {
-                        showAlert(Alert.AlertType.ERROR, "Enter a valid Gem ID");
-                        return;
-                    }
+    private void loadGemTable(){
+        try {
+            List<GemDTO> list = gemBO.getAllGems();
+            tableGem.setItems(FXCollections.observableArrayList(list));
+        } catch (SQLException | ClassNotFoundException e){
+            showAlert(Alert.AlertType.ERROR,e.getMessage());
+        }
+    }
 
-                    GemDTO dto = gemBO.searchGem(String.valueOf(Integer.parseInt(gemid.getText())));
-                    if (dto != null) {
-                        gemname.setText(dto.getGemName());
-                        type.setText(dto.getType());
-                    } else {
-                        showAlert(Alert.AlertType.INFORMATION, "Gem Not Found!");
-                    }
+    private void clearFields(){
+        txtGemId.clear();
+        txtGemName.clear();
+        txtType.clear();
+    }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Search Failed");
-                }
+    private void showAlert(Alert.AlertType type, String msg){
+        new Alert(type,msg).showAndWait();
+    }
+
+    private void setTableClickListener(){
+        tableGem.setOnMouseClicked(event -> {
+            GemDTO dto = tableGem.getSelectionModel().getSelectedItem();
+            if(dto != null){
+                txtGemId.setText(String.valueOf(dto.getGemId()));
+                txtGemName.setText(dto.getGemName());
+                txtType.setText(dto.getType());
             }
+        });
+    }
+
+    private boolean isValidForSave(){
+        if(txtGemName.getText().isEmpty()){
+            showAlert(Alert.AlertType.ERROR,"Gem Name required");
+            txtGemName.requestFocus();
+            return false;
         }
-
-        // UTIL METHODS
-        private void loadGemTable() {
-            try {
-                List<GemDTO> list = gemBO.getAllGems();
-                tablegem.setItems(FXCollections.observableArrayList(list));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if(txtType.getText().isEmpty()){
+            showAlert(Alert.AlertType.ERROR,"Gem Type required");
+            txtType.requestFocus();
+            return false;
         }
+        return true;
+    }
 
-        private void clearFields() {
-            gemid.clear();
-            gemname.clear();
-            type.clear();
+    private boolean isValidForUpdate(){
+        if(txtGemId.getText().isEmpty() || !txtGemId.getText().matches("\\d+")){
+            showAlert(Alert.AlertType.ERROR,"Valid Gem ID required");
+            txtGemId.requestFocus();
+            return false;
         }
-
-        private void showAlert(Alert.AlertType type, String msg) {
-            new Alert(type, msg).showAndWait();
-        }
-
-        private void setTableClickListener() {
-            tablegem.setOnMouseClicked(event -> {
-                GemDTO selected = tablegem.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    gemid.setText(String.valueOf(selected.getGemId()));
-                    gemname.setText(selected.getGemName());
-                    type.setText(selected.getType());
-                }
-            });
-        }
-
-        // VALIDATION
-        private boolean isValidForSave() {
-            if (gemname.getText().isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Gem Name is required");
-                gemname.requestFocus();
-                return false;
-            }
-            if (!gemname.getText().matches("[a-zA-Z ]+")) {
-                showAlert(Alert.AlertType.ERROR, "Gem Name must contain only letters");
-                gemname.requestFocus();
-                return false;
-            }
-
-            if (type.getText().isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Gem Type is required");
-                type.requestFocus();
-                return false;
-            }
-            if (!type.getText().matches("[a-zA-Z ]+")) {
-                showAlert(Alert.AlertType.ERROR, "Gem Type must contain only letters");
-                type.requestFocus();
-                return false;
-            }
-
-            return true;
-        }
-
-        private boolean isValidForUpdate() {
-            if (gemid.getText().isEmpty() || !gemid.getText().matches("\\d+")) {
-                showAlert(Alert.AlertType.ERROR, "Valid Gem ID is required");
-                gemid.requestFocus();
-                return false;
-            }
-            return isValidForSave();
-        }
-
-        @FXML
-        public void gemReset(ActionEvent event) {
-            clearFields();
-        }
-
+        return isValidForSave();
+    }
 }

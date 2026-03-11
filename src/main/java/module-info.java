@@ -6,6 +6,7 @@ module lk.ijse.gem_management_layered {
 
     opens lk.ijse.gem_management_layered to javafx.fxml;
     exports lk.ijse.gem_management_layered.controller;
+    opens lk.ijse.gem_management_layered.controller to javafx.fxml;
     exports lk.ijse.gem_management_layered;
     exports lk.ijse.gem_management_layered.bo;
     opens lk.ijse.gem_management_layered.bo to javafx.fxml;

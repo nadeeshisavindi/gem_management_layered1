@@ -1,6 +1,5 @@
 package lk.ijse.gem_management_layered.bo.custom.impl;
 
-
 import lk.ijse.gem_management_layered.bo.custom.SuppliersBO;
 import lk.ijse.gem_management_layered.dao.DAOFactory;
 import lk.ijse.gem_management_layered.dao.custom.SuppliersDAO;
@@ -13,42 +12,38 @@ import java.util.List;
 
 public class SuppliersBOImpl implements SuppliersBO {
 
-        private final SuppliersDAO supplierDAO =
-                (SuppliersDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.SUPPLIERS);
+    private final SuppliersDAO supplierDAO = (SuppliersDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.SUPPLIERS);
 
-        @Override
-        public boolean saveSupplier(SuppliersDTO dto) throws SQLException {
-            return suppliersDAO.save(new Suppliers(dto.getName(), dto.getAddress(), dto.getContact()));
+    @Override
+    public boolean saveSupplier(SuppliersDTO dto) throws SQLException, ClassNotFoundException {
+        return supplierDAO.save(new Suppliers(dto.getName(), dto.getAddress(), dto.getContact()));
+    }
+
+    @Override
+    public boolean updateSupplier(SuppliersDTO dto) throws SQLException, ClassNotFoundException {
+        return supplierDAO.update(new Suppliers(dto.getId(), dto.getName(), dto.getAddress(), dto.getContact()));
+    }
+
+
+    @Override
+    public boolean deleteSupplier(String id) throws SQLException, ClassNotFoundException {
+        return supplierDAO.delete(Integer.parseInt(id));
+    }
+
+    @Override
+    public SuppliersDTO searchSupplier(String id) throws SQLException, ClassNotFoundException {
+        Suppliers s = supplierDAO.search(Integer.parseInt(id));
+        if (s != null) return new SuppliersDTO(s.getId(), s.getName(), s.getAddress(), s.getContact());
+        return null;
+    }
+
+    @Override
+    public List<SuppliersDTO> getAllSuppliers() throws SQLException, ClassNotFoundException {
+        List<Suppliers> suppliers = supplierDAO.getAll();
+        List<SuppliersDTO> list = new ArrayList<>();
+        for (Suppliers s : suppliers) {
+            list.add(new SuppliersDTO(s.getId(), s.getName(), s.getAddress(), s.getContact()));
         }
-
-
-        @Override
-        public boolean updateSupplier(SuppliersDTO dto) throws SQLException {
-            return suppliersDAO.update(new Suppliers(dto.getSupplierId(), dto.getName(), dto.getAddress(), dto.getContact()));
-        }
-
-        @Override
-        public boolean deleteSupplier(int id) throws SQLException {
-            return suppliersDAO.delete(id);
-        }
-
-        @Override
-        public SuppliersDTO searchSupplier(int id) throws SQLException {
-            Suppliers s = suppliersDAO.search(id);
-            if(s != null){
-                return new SuppliersDTO(s.getSupplierId(), s.getName(), s.getAddress(), s.getContact());
-            }
-            return null;
-        }
-
-        @Override
-        public List<SuppliersDTO> getAllSuppliers() throws SQLException {
-            List<Suppliers> list = suppliersDAO.getAll();
-            List<SuppliersDTO> dtoList = new ArrayList<>();
-            for(Suppliers s : list){
-                dtoList.add(new SuppliersDTO(s.getSupplierId(), s.getName(), s.getAddress(), s.getContact()));
-            }
-            return dtoList;
-        }
-
+        return list;
+    }
 }

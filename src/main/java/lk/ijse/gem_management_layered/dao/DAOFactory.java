@@ -8,31 +8,28 @@ public class DAOFactory {
 
     private DAOFactory() {}
 
-    // Singleton instance
     public static DAOFactory getInstance() {
-        if (daoFactory == null) {
+        if(daoFactory == null){
             daoFactory = new DAOFactory();
         }
         return daoFactory;
     }
 
-
-
-    // Enum to identify DAO types
+    // Enum for DAO types
     public enum DAOType {
-        ORDER,
         GEM,
         GEM_CUTTER,
+        CUSTOMER,
         ORDERS,
         SALES,
-        STOCKS,
-        CUSTOMER,
+        STOCK,
         SUPPLIERS,
+        USER
     }
 
-    // Return DAO based on type
-    public Object getDAO(DAOType type) {
-        switch (type) {
+    // Return DAO instance based on type
+    public Object getDAO(DAOType type){
+        switch (type){
             case GEM:
                 return new GemDAOImpl();
             case GEM_CUTTER:
@@ -43,41 +40,14 @@ public class DAOFactory {
                 return new OrdersDAOImpl();
             case SALES:
                 return new SalesDAOImpl();
-            case STOCKS:
+            case STOCK:
                 return new StockDAOImpl();
             case SUPPLIERS:
                 return new SuppliersDAOImpl();
-
+            case USER:
+                return new UserDAOImpl();
             default:
                 return null;
         }
     }
 }
-//import lk.ijse.gem_management_layered.dao.custom.impl.CustomerDAOImpl;
-//
-//public class DAOFactory {
-//
-//        private static DAOFactory daoFactory;
-//        private DAOFactory() {}
-//
-//        public static DAOFactory getInstance() {
-//            return daoFactory==null ? daoFactory=new DAOFactory() : daoFactory;
-//        }
-//
-//    public Object getDAO(DAOType daoType) {
-//    }
-//
-//    public enum DAOType {
-//            GEM_CUTTER, GEM, CUSTOMER
-//        }
-//
-//        public SuperDAO getDAOType(DAOType daoType) {
-//            switch (daoType) {
-//                case CUSTOMER:
-//                    return new CustomerDAOImpl();
-//                default:
-//                    return null;
-//            }
-//        }
-//
-//}

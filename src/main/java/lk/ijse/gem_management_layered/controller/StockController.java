@@ -1,4 +1,5 @@
 package lk.ijse.gem_management_layered.controller;
+
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,7 +8,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lk.ijse.gem_management_layered.bo.BOFactory;
-import lk.ijse.gem_management_layered.bo.custom.GemBO;
 import lk.ijse.gem_management_layered.bo.custom.StockBO;
 import lk.ijse.gem_management_layered.dto.GemDTO;
 import lk.ijse.gem_management_layered.dto.StockDTO;
@@ -15,202 +15,137 @@ import lk.ijse.gem_management_layered.dto.StockDTO;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+
 public class StockController {
 
+    @FXML private TextField txtStockId;
+    @FXML private TextField txtQuantity;
+    @FXML private DatePicker dpDate;
+    @FXML private ComboBox<GemDTO> cmbGem;
 
-        @FXML
-        private TextField stockid;
+    @FXML private TableView<StockDTO> tableStock;
+    @FXML private TableColumn<StockDTO, Integer> colStockId;
+    @FXML private TableColumn<StockDTO, Integer> colGemId;
+    @FXML private TableColumn<StockDTO, Integer> colQuantity;
+    @FXML private TableColumn<StockDTO, LocalDate> colDate;
 
-        @FXML
-        private TextField quantity;
+    private final StockBO stockBO = (StockBO) BOFactory.getInstance().getBO(BOFactory.BOType.STOCK);
 
-        @FXML
-        private DatePicker date;
+    @FXML
+    public void initialize() {
+        colStockId.setCellValueFactory(new PropertyValueFactory<>("stockId"));
+        colGemId.setCellValueFactory(new PropertyValueFactory<>("gemId"));
+        colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        @FXML
-        private ComboBox<GemDTO> gemCombo;
+        loadStockTable();
+        tableClick();
+    }
 
-        @FXML
-        private TableView<StockDTO> tablestock;
-
-        @FXML
-        private TableColumn<StockDTO,Integer> colstockid;
-
-        @FXML
-        private TableColumn<StockDTO,Integer> colgemid;
-
-        @FXML
-        private TableColumn<StockDTO,Integer> colquantity;
-
-        @FXML
-        private TableColumn<StockDTO, LocalDate> coldate;
-
-        private final StockBO stockBO =
-                (StockBO) BOFactory.getInstance().getBO(BOFactory.BOType.STOCK);
-
-        private final GemBO gemBO =
-                (GemBO) BOFactory.getInstance().getBO(BOFactory.BOType.GEM);
-
-        public void initialize(){
-
-            colstockid.setCellValueFactory(new PropertyValueFactory<>("stockId"));
-            colgemid.setCellValueFactory(new PropertyValueFactory<>("gemId"));
-            colquantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-            coldate.setCellValueFactory(new PropertyValueFactory<>("date"));
-
-            loadStockTable();
-            loadGemCombo();
-            setTableClick();
-        }
-
-        // SAVE
-        @FXML
-        void stockSave(ActionEvent event) {
-
-            try {
-
-                GemDTO gem = gemCombo.getSelectionModel().getSelectedItem();
-
-                StockDTO dto = new StockDTO(
-                        gem.getGemId(),
-                        Integer.parseInt(quantity.getText()),
-                        date.getValue()
-                );
-
-                if(stockBO.saveStock(dto)){
-                    alert("Stock Saved");
-                    loadStockTable();
-                    clearFields();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
+    @FXML
+    public void saveStock(ActionEvent event) {
+        try {
+            if (!isValid()) return;
+            GemDTO gem = cmbGem.getSelectionModel().getSelectedItem();
+            StockDTO dto = new StockDTO(gem.getGemId(), Integer.parseInt(txtQuantity.getText()), dpDate.getValue());
+            if (stockBO.saveStock(dto)) {
+                showAlert(Alert.AlertType.INFORMATION, "Stock Saved!");
+                clearFields();
+                loadStockTable();
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
         }
+    }
 
-        // UPDATE
-        @FXML
-        void stockUpdate(ActionEvent event) {
-
-            try {
-
-                GemDTO gem = gemCombo.getSelectionModel().getSelectedItem();
-
-                StockDTO dto = new StockDTO(
-                        Integer.parseInt(stockid.getText()),
-                        gem.getGemId(),
-                        Integer.parseInt(quantity.getText()),
-                        date.getValue()
-                );
-
-                if(stockBO.updateStock(dto)){
-                    alert("Stock Updated");
-                    loadStockTable();
-                    clearFields();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
+    @FXML
+    public void updateStock(ActionEvent event) {
+        try {
+            if (!isValid() || txtStockId.getText().isEmpty()) return;
+            GemDTO gem = cmbGem.getSelectionModel().getSelectedItem();
+            StockDTO dto = new StockDTO(Integer.parseInt(txtStockId.getText()), gem.getGemId(), Integer.parseInt(txtQuantity.getText()), dpDate.getValue());
+            if (stockBO.updateStock(dto)) {
+                showAlert(Alert.AlertType.INFORMATION, "Stock Updated!");
+                clearFields();
+                loadStockTable();
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
         }
+    }
 
-        // DELETE
-        @FXML
-        void stockDelete(ActionEvent event) {
-
-            try {
-
-                if(stockBO.deleteStock(Integer.parseInt(stockid.getText()))){
-                    alert("Stock Deleted");
-                    loadStockTable();
-                    clearFields();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
+    @FXML
+    public void deleteStock(ActionEvent event) {
+        try {
+            if (txtStockId.getText().isEmpty()) return;
+            if (stockBO.deleteStock(txtStockId.getText())) {
+                showAlert(Alert.AlertType.INFORMATION, "Stock Deleted!");
+                clearFields();
+                loadStockTable();
             }
+        } catch (SQLException | ClassNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
         }
+    }
 
-        // SEARCH
-        @FXML
-        void searchStock(KeyEvent event) {
+    @FXML
+    public void resetStock(ActionEvent event) {
+        clearFields();
+    }
 
-            if(event.getCode()== KeyCode.ENTER){
-
-                try {
-
-                    StockDTO dto = stockBO.searchStock(
-                            Integer.parseInt(stockid.getText())
-                    );
-
-                    if(dto!=null){
-
-                        quantity.setText(String.valueOf(dto.getQuantity()));
-                        date.setValue(dto.getDate());
-
-                    }else{
-                        alert("Stock Not Found");
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // LOAD TABLE
-        private void loadStockTable(){
-
+    @FXML
+    public void searchStock(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
             try {
-
-                List<StockDTO> list = stockBO.getAllStock();
-                tablestock.setItems(FXCollections.observableArrayList(list));
-
+                StockDTO dto = stockBO.searchStock(txtStockId.getText());
+                if (dto != null) {
+                    txtQuantity.setText(String.valueOf(dto.getQuantity()));
+                    dpDate.setValue(dto.getDate());
+                    // Gem selection handled outside if needed
+                } else {
+                    showAlert(Alert.AlertType.INFORMATION, "Stock Not Found!");
+                }
             } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, e.getMessage());
             }
         }
+    }
 
-        // LOAD COMBO
-        private void loadGemCombo(){
+    private void loadStockTable() {
+        try {
+            List<StockDTO> list = stockBO.getAllStock();
+            tableStock.setItems(FXCollections.observableArrayList(list));
+        } catch (SQLException | ClassNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
+        }
+    }
 
-            try {
-
-                List<GemDTO> list = gemBO.getAllGems();
-                gemCombo.setItems(FXCollections.observableArrayList(list));
-
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+    private void tableClick() {
+        tableStock.setOnMouseClicked(event -> {
+            StockDTO dto = tableStock.getSelectionModel().getSelectedItem();
+            if (dto != null) {
+                txtStockId.setText(String.valueOf(dto.getStockId()));
+                txtQuantity.setText(String.valueOf(dto.getQuantity()));
+                dpDate.setValue(dto.getDate());
             }
-        }
+        });
+    }
 
-        // TABLE CLICK
-        private void setTableClick(){
+    private boolean isValid() {
+        if (txtQuantity.getText().isEmpty() || !txtQuantity.getText().matches("\\d+")) return false;
+        if (dpDate.getValue() == null) return false;
+        if (cmbGem.getSelectionModel().getSelectedItem() == null) return false;
+        return true;
+    }
 
-            tablestock.setOnMouseClicked(event -> {
+    private void clearFields() {
+        txtStockId.clear();
+        txtQuantity.clear();
+        dpDate.setValue(null);
+        cmbGem.getSelectionModel().clearSelection();
+    }
 
-                StockDTO dto = tablestock.getSelectionModel().getSelectedItem();
-
-                if(dto!=null){
-
-                    stockid.setText(String.valueOf(dto.getStockId()));
-                    quantity.setText(String.valueOf(dto.getQuantity()));
-                    date.setValue(dto.getDate());
-                }
-            });
-        }
-
-        // CLEAR
-        private void clearFields(){
-
-            stockid.clear();
-            quantity.clear();
-            date.setValue(null);
-            gemCombo.getSelectionModel().clearSelection();
-        }
-
-        private void alert(String msg){
-            new Alert(Alert.AlertType.INFORMATION,msg).show();
-        }
-
+    private void showAlert(Alert.AlertType type, String msg) {
+        new Alert(type, msg).showAndWait();
+    }
 }

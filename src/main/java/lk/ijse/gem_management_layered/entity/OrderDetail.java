@@ -1,6 +1,6 @@
-package lk.ijse.gem_management_layered.dto;
+package lk.ijse.gem_management_layered.entity;
 
-public class OrderDetailDTO {
+public class OrderDetail {
     private int orderDetailsId;
     private int orderId;
     private int gemId;
@@ -8,14 +8,16 @@ public class OrderDetailDTO {
     private int quantity;
     private double unitPrice;
 
-    public OrderDetailDTO() {}
-    public OrderDetailDTO(int gemId, String gemName, int quantity, double unitPrice) {
+    public OrderDetail() {}
+
+    public OrderDetail(int gemId, String gemName, int quantity, double unitPrice) {
         this.gemId = gemId;
         this.gemName = gemName;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
-    public OrderDetailDTO(int orderDetailsId, int orderId, int gemId, String gemName, int quantity, double unitPrice) {
+
+    public OrderDetail(int orderDetailsId, int orderId, int gemId, String gemName, int quantity, double unitPrice) {
         this.orderDetailsId = orderDetailsId;
         this.orderId = orderId;
         this.gemId = gemId;
@@ -38,3 +40,4 @@ public class OrderDetailDTO {
     public double getUnitPrice() { return unitPrice; }
     public void setUnitPrice(double unitPrice) { this.unitPrice = unitPrice; }
 }
+

@@ -1,38 +1,37 @@
 package lk.ijse.gem_management_layered.entity;
 
 public class Sales {
+    private int saleId;
+    private int orderId;
+    private String customerName;
+    private String orderStatus;
 
+    // Constructors
+    public Sales() {}
 
-        private int saleId;
-        private String cancel;
-        private String updateInfo;
-        private String returnInfo;
+    public Sales(int orderId, String customerName, String orderStatus) {
+        this.orderId = orderId;
+        this.customerName = customerName;
+        this.orderStatus = orderStatus;
+    }
 
-        public Sales(int saleId, int cancel, String updateInfo, String returnInfo) {}
+    public Sales(int saleId, int orderId, String customerName, String orderStatus) {
+        this.saleId = saleId;
+        this.orderId = orderId;
+        this.customerName = customerName;
+        this.orderStatus = orderStatus;
+    }
 
-        public Sales(String cancel, String updateInfo, String returnInfo) {
-            this.cancel = cancel;
-            this.updateInfo = updateInfo;
-            this.returnInfo = returnInfo;
-        }
+    // Getters & Setters
+    public int getSaleId() { return saleId; }
+    public void setSaleId(int saleId) { this.saleId = saleId; }
 
-        public Sales(int saleId, String cancel, String updateInfo, String returnInfo) {
-            this.saleId = saleId;
-            this.cancel = cancel;
-            this.updateInfo = updateInfo;
-            this.returnInfo = returnInfo;
-        }
+    public int getOrderId() { return orderId; }
+    public void setOrderId(int orderId) { this.orderId = orderId; }
 
-        public int getSaleId() { return saleId; }
-        public void setSaleId(int saleId) { this.saleId = saleId; }
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
 
-        public String getCancel() { return cancel; }
-        public void setCancel(String cancel) { this.cancel = cancel; }
-
-        public String getUpdateInfo() { return updateInfo; }
-        public void setUpdateInfo(String updateInfo) { this.updateInfo = updateInfo; }
-
-        public String getReturnInfo() { return returnInfo; }
-        public void setReturnInfo(String returnInfo) { this.returnInfo = returnInfo; }
-
+    public String getOrderStatus() { return orderStatus; }
+    public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
 }

@@ -1,152 +1,101 @@
 package lk.ijse.gem_management_layered.dao.custom.impl;
 
-
-
 import lk.ijse.gem_management_layered.dao.custom.OrdersDAO;
 import lk.ijse.gem_management_layered.dto.OrdersDTO;
 import lk.ijse.gem_management_layered.dto.OrderDetailDTO;
-
+import lk.ijse.gem_management_layered.dto.OrdersTableDTO;
 import lk.ijse.gem_management_layered.util.CRUDUtill;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-    public class OrdersDAOImpl implements OrdersDAO {
+public class OrdersDAOImpl implements OrdersDAO {
 
-        @Override
-        public boolean save(OrdersDTO order) throws SQLException {
-            Connection conn = CRUDUtill.getConnection();
-            conn.setAutoCommit(false);
-            try {
-                int orderId = CRUDUtill.executeAndReturnGeneratedKey(
-                        conn,
-                        "INSERT INTO Orders (customer_id, gem_cutter_id, order_date) VALUES (?,?,?)",
-                        order.getCustomerId(),
-                        order.getGemCutterId(),
-                        java.sql.Date.valueOf(order.getOrderDate())
-                );
+    @Override
+    public List<OrdersTableDTO> getAllOrders() throws Exception {
+        ResultSet rs = CRUDUtill.executeQuery("SELECT o.order_id, c.first_name, g.cutter_name, o.order_date " +
+                "FROM Orders o JOIN Customers c ON o.customer_id=c.id " +
+                "JOIN Gem_Cutter g ON o.gem_cutter_id=g.cutter_id");
 
-                for (OrderDetailDTO detail : order.getOrderDetails()) {
-                    CRUDUtill.execute(
-                            conn,
-                            "INSERT INTO OrderDetails (order_id, gem_id, quantity, unit_price) VALUES (?,?,?,?)",
-                            orderId,
-                            detail.getGemId(),
-                            detail.getQuantity(),
-                            detail.getUnitPrice()
-                    );
-                }
-
-                conn.commit();
-                return true;
-            } catch (SQLException | ClassNotFoundException e) {
-                conn.rollback();
-                throw e;
-            } finally {
-                conn.setAutoCommit(true);
-            }
+        List<OrdersTableDTO> list = new ArrayList<>();
+        while (rs.next()) {
+            list.add(new OrdersTableDTO(
+                    rs.getInt("order_id"),
+                    rs.getString("first_name"),
+                    rs.getString("cutter_name"),
+                    rs.getDate("order_date").toLocalDate()
+            ));
         }
+        return list;
+    }
 
-        @Override
-        public boolean update(OrdersDTO order) throws SQLException {
-            Connection conn = CRUDUtill.getConnection();
-            conn.setAutoCommit(false);
-            try {
-                boolean updated = CRUDUtill.execute(
-                        conn,
-                        "UPDATE Orders SET customer_id=?, gem_cutter_id=?, order_date=? WHERE order_id=?",
-                        order.getCustomerId(),
-                        order.getGemCutterId(),
-                        java.sql.Date.valueOf(order.getOrderDate()),
-                        order.getOrderId()
-                );
+    @Override
+    public void saveOrder(OrdersDTO order) throws Exception {
+        CRUDUtill.execute("INSERT INTO Orders(customer_id, gem_cutter_id, order_date) VALUES (?, ?, ?)",
+                order.getCustomerId(), order.getGemCutterId(), order.getOrderDate());
 
-                CRUDUtill.execute(conn, "DELETE FROM OrderDetails WHERE order_id=?", order.getOrderId());
+        ResultSet rs = CRUDUtill.executeQuery("SELECT LAST_INSERT_ID() AS id");
+        int orderId = 0;
+        if (rs.next()) orderId = rs.getInt("id");
 
-                for (OrderDetailDTO detail : order.getOrderDetails()) {
-                    CRUDUtill.execute(
-                            conn,
-                            "INSERT INTO OrderDetails (order_id, gem_id, quantity, unit_price) VALUES (?,?,?,?)",
-                            order.getOrderId(),
-                            detail.getGemId(),
-                            detail.getQuantity(),
-                            detail.getUnitPrice()
-                    );
-                }
-
-                conn.commit();
-                return updated;
-            } catch (SQLException | ClassNotFoundException e) {
-                conn.rollback();
-                throw e;
-            } finally {
-                conn.setAutoCommit(true);
-            }
+        for (OrderDetailDTO d : order.getOrderDetails()) {
+            CRUDUtill.execute("INSERT INTO Order_Detail(order_id, gem_id, quantity, unit_price) VALUES(?, ?, ?, ?)",
+                    orderId, d.getGemId(), d.getQuantity(), d.getUnitPrice());
         }
+    }
 
-        @Override
-        public boolean delete(int orderId) throws SQLException, ClassNotFoundException {
-            Connection conn = CRUDUtill.getConnection();
-            conn.setAutoCommit(false);
-            try {
-                CRUDUtill.execute(conn, "DELETE FROM OrderDetails WHERE order_id=?", orderId);
-                boolean deleted = CRUDUtill.execute(conn, "DELETE FROM Orders WHERE order_id=?", orderId);
-                conn.commit();
-                return deleted;
-            } catch (SQLException | ClassNotFoundException e) {
-                conn.rollback();
-                throw e;
-            } finally {
-                conn.setAutoCommit(true);
-            }
-        }
-
-        @Override
-        public OrdersDTO search(int orderId) throws SQLException {
-            ResultSet rs = CRUDUtill.executeQuery(
-                    "SELECT * FROM Orders WHERE order_id=?",
-                    orderId
+    @Override
+    public OrdersDTO searchOrder(int orderId) throws Exception {
+        ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM Orders WHERE order_id=?", orderId);
+        OrdersDTO order = null;
+        if (rs.next()) {
+            order = new OrdersDTO(
+                    rs.getInt("order_id"),
+                    rs.getInt("customer_id"),
+                    rs.getInt("gem_cutter_id"),
+                    rs.getDate("order_date").toLocalDate(),
+                    getOrderDetails(orderId)
             );
-
-            if (rs.next()) {
-                OrdersDTO order = new OrdersDTO();
-                order.setOrderId(rs.getInt("order_id"));
-                order.setCustomerId(rs.getInt("customer_id"));
-                order.setGemCutterId(rs.getInt("gem_cutter_id"));
-                order.setOrderDate(rs.getDate("order_date").toLocalDate());
-
-                List<OrderDetailDTO> details = new ArrayList<>();
-                ResultSet rsDetails = CRUDUtill.executeQuery(
-                        "SELECT * FROM OrderDetails WHERE order_id=?",
-                        orderId
-                );
-                while (rsDetails.next()) {
-                    details.add(new OrderDetailDTO(
-                            rsDetails.getInt("order_detail_id"),
-                            rsDetails.getInt("order_id"),
-                            rsDetails.getInt("gem_id"),
-                            rsDetails.getInt("quantity"),
-                            rsDetails.getDouble("unit_price")
-                    ));
-                }
-                order.setOrderDetails(details);
-                return order;
-            }
-            return null;
         }
+        return order;
+    }
 
-        @Override
-        public List<OrdersDTO> getAll() throws SQLException {
-            List<OrdersDTO> list = new ArrayList<>();
-            int orderId;
-            ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM Orders", orderId);
-            while (rs.next()) {
-                list.add(search(rs.getInt("order_id")));
-            }
-            return list;
+    private List<OrderDetailDTO> getOrderDetails(int orderId) throws Exception {
+        ResultSet rs = CRUDUtill.executeQuery("SELECT od.order_detail_id, od.gem_id, g.gem_name, od.quantity, od.unit_price " +
+                "FROM Order_Detail od JOIN Gem g ON od.gem_id=g.gem_id WHERE od.order_id=?", orderId);
+
+        List<OrderDetailDTO> list = new ArrayList<>();
+        while (rs.next()) {
+            list.add(new OrderDetailDTO(
+                    rs.getInt("order_detail_id"),
+                    orderId,
+                    rs.getInt("gem_id"),
+                    rs.getString("gem_name"),
+                    rs.getInt("quantity"),
+                    rs.getDouble("unit_price")
+            ));
         }
+        return list;
+    }
 
+    @Override
+    public void updateOrder(OrdersDTO order) throws Exception {
+        CRUDUtill.execute("UPDATE Orders SET customer_id=?, gem_cutter_id=?, order_date=? WHERE order_id=?",
+                order.getCustomerId(), order.getGemCutterId(), order.getOrderDate(), order.getOrderId());
+
+        CRUDUtill.execute("DELETE FROM Order_Detail WHERE order_id=?", order.getOrderId());
+
+        for (OrderDetailDTO d : order.getOrderDetails()) {
+
+            CRUDUtill.execute("INSERT INTO Order_Detail(order_id, gem_id, quantity, unit_price) VALUES(?, ?, ?, ?)",
+                    order.getOrderId(), d.getGemId(), d.getQuantity(), d.getUnitPrice());
+        }
+    }
+
+    @Override
+    public void deleteOrder(int orderId) throws Exception {
+        CRUDUtill.execute("DELETE FROM Order_Detail WHERE order_id=?", orderId);
+        CRUDUtill.execute("DELETE FROM Orders WHERE order_id=?", orderId);
+    }
 }

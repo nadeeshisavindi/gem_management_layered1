@@ -1,14 +1,149 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!--<?import java.lang.*?>-->
-<!--<?import java.util.*?>-->
-<!--<?import javafx.scene.*?>-->
-<!--<?import javafx.scene.control.*?>-->
-<!--<?import javafx.scene.layout.*?>-->
+                <?import javafx.geometry.Insets?>
+                <?import javafx.scene.control.Button?>
+                <?import javafx.scene.control.ComboBox?>
+                <?import javafx.scene.control.Label?>
+                <?import javafx.scene.control.TableColumn?>
+                <?import javafx.scene.control.TableView?>
+                <?import javafx.scene.control.TextField?>
+                <?import javafx.scene.image.Image?>
+                <?import javafx.scene.image.ImageView?>
+                <?import javafx.scene.layout.AnchorPane?>
+                <?import javafx.scene.layout.HBox?>
+                <?import javafx.scene.layout.Pane?>
+                <?import javafx.scene.layout.VBox?>
+                <?import javafx.scene.text.Font?>
+                <?import javafx.scene.text.Text?>
+                <?import javafx.scene.control.Tooltip?>
 
-<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
-<!--            xmlns:fx="http://javafx.com/fxml"-->
-<!--            fx:controller="CONTROLLER_NAME"-->
-<!--            prefHeight="400.0" prefWidth="600.0">-->
+        <AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1014.0"
+                    xmlns:fx="http://javafx.com/fxml/1"
+                    xmlns="http://javafx.com/javafx/25"
+                    fx:controller="lk.ijse.gem_management_layered.controller.StockController">
+            <children>
 
-<!--</AnchorPane>-->
+                <!-- Header -->
+                <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1014.0" style="-fx-background-color: #8e061b;">
+                    <children>
+                        <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="SALES">
+                            <font>
+                                <Font name="System Bold" size="35.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </VBox>
+
+                <!-- Input Pane -->
+                <Pane layoutY="50.0" prefHeight="286.0" prefWidth="1014.0" style="-fx-background-color: #000000;">
+                    <children>
+                        <ImageView fitHeight="286.0" fitWidth="442.0" layoutX="66.0" opacity="0.2" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@GemImages/WhatsApp%20Image%202025-12-23%20at%2000.51.10.jpeg" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="286.0" fitWidth="453.0" layoutX="550.0" opacity="0.2" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@GemImages/WhatsApp%20Image%202025-12-23%20at%2000.51.10.jpeg" />
+                            </image>
+                        </ImageView>
+
+                        <!-- Sale ID -->
+                        <VBox layoutX="51.0" layoutY="29.0" prefHeight="47.0" prefWidth="294.0">
+                            <children>
+                                <Label text="Sale_ID :" textFill="WHITESMOKE">
+                                    <font><Font name="System Bold" size="16.0" /></font>
+                                </Label>
+                                <TextField fx:id="saleid" onKeyPressed="#searchSale" />
+                            </children>
+                        </VBox>
+
+                        <!-- Order ID -->
+                        <VBox layoutX="51.0" layoutY="93.0" prefHeight="47.0" prefWidth="294.0">
+                            <children>
+                                <Label text="Order_ID :" textFill="WHITESMOKE">
+                                    <font><Font name="System Bold" size="16.0" /></font>
+                                </Label>
+                                <TextField fx:id="orderid" />
+                            </children>
+                        </VBox>
+
+                        <!-- Customer Name -->
+                        <VBox layoutX="51.0" layoutY="165.0" prefHeight="47.0" prefWidth="294.0">
+                            <children>
+                                <Label text="Customer Name :" textFill="WHITESMOKE">
+                                    <font><Font name="System Bold" size="16.0" /></font>
+                                </Label>
+                                <TextField fx:id="customerName" />
+                            </children>
+                        </VBox>
+
+                        <!-- Order Status ComboBox -->
+                        <VBox layoutX="603.0" layoutY="29.0" prefHeight="47.0" prefWidth="294.0">
+                            <children>
+                                <Label text="Order Status :" textFill="WHITESMOKE">
+                                    <font><Font name="System Bold" size="16.0" /></font>
+                                </Label>
+                                <ComboBox fx:id="orderStatus" prefWidth="200.0" />
+                            </children>
+                        </VBox>
+
+                        <!-- Buttons -->
+                        <HBox alignment="CENTER" layoutX="454.0" layoutY="153.0" prefHeight="100.0" prefWidth="525.0" spacing="10">
+                            <children>
+
+                                <Button mnemonicParsing="false" onAction="#saleSave" prefHeight="35.0" prefWidth="103.0"
+                                        style="-fx-background-color: #2E7D32; -fx-text-fill: white;-fx-font-weight: bold;" text="Save">
+                                    <tooltip>
+                                        <Tooltip text="Save Order Details" />
+                                    </tooltip>
+                                </Button>
+
+                                <Button mnemonicParsing="false" onAction="#saleUpdate" prefHeight="35.0" prefWidth="103.0"
+                                        style="-fx-background-color: #1976D2; -fx-text-fill: white;-fx-font-weight: bold;" text="Update">
+                                    <tooltip>
+                                        <Tooltip text="Update Order Details" />
+                                    </tooltip>
+                                </Button>
+
+                                <Button mnemonicParsing="false" onAction="#saleDelete" prefHeight="35.0" prefWidth="103.0"
+                                        style="-fx-background-color: #8e061b; -fx-text-fill: white;-fx-font-weight: bold;" text="Delete">
+                                    <tooltip>
+                                        <Tooltip text="Delete Order Record" />
+                                    </tooltip>
+                                </Button>
+
+                                <Button mnemonicParsing="false" onAction="#saleReset" prefHeight="35.0" prefWidth="103.0"
+                                        style="-fx-background-color: orange; -fx-text-fill: white;-fx-font-weight: bold;" text="Reset">
+                                    <tooltip>
+                                        <Tooltip text="Reset All Fields" />
+                                    </tooltip>
+                                </Button>
+
+                            </children>
+                        </HBox>
+
+                    </children>
+                </Pane>
+
+                <!-- TableView Pane -->
+                <Pane layoutY="336.0" prefHeight="367.0" prefWidth="1014.0" style="-fx-background-color: #000000;">
+                    <children>
+                        <ImageView fitHeight="367.0" fitWidth="732.0" layoutX="361.0" opacity="0.15" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@GemImages/1182460-3840x2160-desktop-4k-gemstone-background-photo.jpg" />
+                            </image>
+                        </ImageView>
+                        <TableView fx:id="tablesales" opacity="0.42" prefHeight="367.0" prefWidth="1014.0">
+                            <columns>
+                                <TableColumn fx:id="colsaleid" prefWidth="165.0" text="Sale_ID" />
+                                <TableColumn fx:id="colorderid" prefWidth="165.0" text="Order_ID" />
+                                <TableColumn fx:id="colcustomerName" prefWidth="340.0" text="Customer Name" />
+                                <TableColumn fx:id="colorderStatus" prefWidth="340.0" text="Order Status" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </Pane>
+
+            </children>
+        </AnchorPane>

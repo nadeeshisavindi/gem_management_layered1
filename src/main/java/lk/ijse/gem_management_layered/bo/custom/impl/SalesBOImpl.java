@@ -12,57 +12,38 @@ import java.util.List;
 
 public class SalesBOImpl implements SalesBO {
 
-    private final SalesDAO salesDAO =
-            (SalesDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.SALES);
+    private final SalesDAO saleDAO = (SalesDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.SALES);
 
     @Override
     public boolean saveSale(SalesDTO dto) throws SQLException, ClassNotFoundException {
-        return salesDAO.save(
-                new Sales(dto.getCancel(), dto.getUpdateInfo(), dto.getReturnInfo())
-        );
+        return saleDAO.save(new Sales(dto.getOrderId(), dto.getCustomerName(), dto.getOrderStatus()));
     }
 
     @Override
     public boolean updateSale(SalesDTO dto) throws SQLException, ClassNotFoundException {
-        return salesDAO.update(
-                new Sales(dto.getSaleId(), dto.getCancel(), dto.getUpdateInfo(), dto.getReturnInfo())
-        );
+        return saleDAO.update(new Sales(dto.getSaleId(), dto.getOrderId(), dto.getCustomerName(), dto.getOrderStatus()));
+    }
+
+
+    @Override
+    public boolean deleteSale(String saleId) throws SQLException, ClassNotFoundException {
+        return saleDAO.delete(Integer.parseInt(saleId));
     }
 
     @Override
-    public boolean deleteSale(int id) throws SQLException, ClassNotFoundException {
-        return salesDAO.delete(id);
-    }
-
-    @Override
-    public SalesDTO searchSale(int id) throws SQLException, ClassNotFoundException {
-        Sales sales = salesDAO.search(id);
-        if (sales == null) return null;
-
-        return new SalesDTO(
-                sales.getSaleId(),
-                sales.getCancel(),
-                sales.getUpdateInfo(),
-                sales.getReturnInfo()
-        );
+    public SalesDTO searchSale(String saleId) throws SQLException, ClassNotFoundException {
+        Sales s = saleDAO.search(Integer.parseInt(saleId));
+        if (s != null) return new SalesDTO(s.getSaleId(), s.getOrderId(), s.getCustomerName(), s.getOrderStatus());
+        return null;
     }
 
     @Override
     public List<SalesDTO> getAllSales() throws SQLException, ClassNotFoundException {
-        // FIXED: List<Sales> instead of List<Stock>
-        List<Sales> list = salesDAO.getAll();
-
-        List<SalesDTO> dtoList = new ArrayList<>();
-        for (Sales s : list) {
-            dtoList.add(
-                    new SalesDTO(
-                            s.getSaleId(),
-                            s.getCancel(),
-                            s.getUpdateInfo(),
-                            s.getReturnInfo()
-                    )
-            );
+        List<Sales> sales = saleDAO.getAll();
+        List<SalesDTO> list = new ArrayList<>();
+        for (Sales s : sales) {
+            list.add(new SalesDTO(s.getSaleId(), s.getOrderId(), s.getCustomerName(), s.getOrderStatus()));
         }
-        return dtoList;
+        return list;
     }
 }

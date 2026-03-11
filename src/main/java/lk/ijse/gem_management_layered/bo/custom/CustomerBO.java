@@ -6,18 +6,13 @@ import lk.ijse.gem_management_layered.dto.CustomerDTO;
 import java.sql.SQLException;
 import java.util.List;
 
+public interface CustomerBO extends SuperBO {
 
-import java.sql.SQLException;
+    boolean saveCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException;
 
-public interface CustomerBO extends SuperBO  {
+    boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException;
 
+    List<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException;
 
-
-   // public interface CustomerBO extends SuperBO {
-        boolean saveCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException;
-        boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException;
-        List<CustomerDTO> getAllCustomers() throws SQLException;
-
+    CustomerDTO searchCustomer(String text);
 }
-
-

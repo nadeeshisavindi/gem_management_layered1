@@ -1,14 +1,204 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.Tooltip?>
+<AnchorPane prefHeight="700.0" prefWidth="1014.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="lk.ijse.gem_management_layered.controller.SuppliersController">
+
+    <!-- Header -->
+    <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1014.0"
+          style="-fx-background-color: #8e061b;">
+        <children>
+            <Text fill="WHITESMOKE" text="SUPPLIERS">
+                <font>
+                    <Font name="System Bold" size="32.0"/>
+                </font>
+            </Text>
+        </children>
+    </VBox>
+
+    <!-- Input Form -->
+    <Pane layoutY="50.0" prefHeight="286.0" prefWidth="1014.0"
+          style="-fx-background-color: #000000;">
+        <children>
+
+            <!-- Background images -->
+            <ImageView fitHeight="286.0" fitWidth="470.0"
+                       layoutX="14.0" opacity="0.2">
+                <image>
+                    <Image url="@GemImages/WhatsApp%20Image%202025-12-23%20at%2000.51.10.jpeg"/>
+                </image>
+            </ImageView>
+
+            <ImageView fitHeight="275.0" fitWidth="444.0"
+                       layoutX="566.0" layoutY="6.0" opacity="0.17">
+                <image>
+                    <Image url="@GemImages/WhatsApp%20Image%202025-12-23%20at%2000.51.10.jpeg"/>
+                </image>
+            </ImageView>
+
+            <!-- Supplier ID -->
+            <VBox layoutX="26.0" layoutY="14.0" spacing="5">
+                <Label text="Supplier ID :" textFill="WHITESMOKE">
+                    <font><Font size="16.0"/></font>
+                </Label>
+                <TextField fx:id="supplierid" prefWidth="335.0"
+                           onKeyPressed="#searchSupplier"/>
+            </VBox>
+
+            <!-- Name -->
+            <VBox layoutX="26.0" layoutY="75.0" spacing="5">
+                <Label text="Name :" textFill="WHITESMOKE">
+                    <font><Font size="16.0"/></font>
+                </Label>
+                <TextField fx:id="name" prefWidth="335.0"/>
+            </VBox>
+
+            <!-- Address -->
+            <VBox layoutX="26.0" layoutY="137.0" spacing="5">
+                <Label text="Address :" textFill="WHITESMOKE">
+                    <font><Font size="16.0"/></font>
+                </Label>
+                <TextField fx:id="address" prefWidth="335.0"/>
+            </VBox>
+
+            <!-- Contact -->
+            <VBox layoutX="507.0" layoutY="14.0" spacing="5">
+                <Label text="Contact :" textFill="WHITESMOKE">
+                    <font><Font size="16.0"/></font>
+                </Label>
+                <TextField fx:id="contact" prefWidth="335.0"/>
+            </VBox>
+
+            <!-- Buttons -->
+            <HBox alignment="CENTER" layoutX="382.0" layoutY="182.0" prefHeight="55.0" prefWidth="614.0" spacing="12">
+                <children>
+
+                    <!-- Save Button -->
+                    <Button text="Save" prefHeight="36.0" prefWidth="111.0"
+                            style="-fx-background-color:#2E7D32;-fx-font-weight: bold;" textFill="WHITESMOKE" onAction="#saveSupplier">
+                        <tooltip>
+                            <Tooltip text="Save Supplier Details"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #43A047, #1B5E20);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #1B5E20;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Update Button -->
+                    <Button text="Update" prefHeight="36.0" prefWidth="111.0"
+                            style="-fx-background-color:#1976D2; -fx-font-weight: bold;" textFill="WHITESMOKE" onAction="#updateSupplier">
+                        <tooltip>
+                            <Tooltip text="Update Supplier Details"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #2196F3, #0D47A1);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #0D47A1;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Delete Button -->
+                    <Button text="Delete" prefHeight="36.0" prefWidth="111.0"
+                            style="-fx-background-color:#8e061b; -fx-text-fill: white; -fx-font-weight: bold;" textFill="WHITESMOKE" onAction="#deleteSupplier">
+                        <tooltip>
+                            <Tooltip text="Delete Supplier Record"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #B71C1C, #7F0000);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #7F0000;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Reset Button -->
+                    <Button text="Reset" prefHeight="36.0" prefWidth="111.0"
+                            style="-fx-background-color:orange; -fx-font-weight: bold;" textFill="WHITESMOKE" onAction="#resetSupplier">
+                        <tooltip>
+                            <Tooltip text="Reset All Fields"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #FFA726, #F57C00);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #F57C00;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                </children>
+            </HBox>
+
+        </children>
+    </Pane>
+
+    <!-- Table Pane -->
+    <Pane layoutY="335.0" prefHeight="365.0" prefWidth="1014.0"
+          style="-fx-background-color: #000000;">
+        <children>
+
+            <ImageView fitHeight="365.0" fitWidth="654.0" layoutX="351.0" opacity="0.15" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@GemImages/1182460-3840x2160-desktop-4k-gemstone-background-photo.jpg"/>
+                </image>
+            </ImageView>
+
+            <TableView fx:id="tablesupplier" prefHeight="365.0" prefWidth="1014.0" opacity="0.42">
+                <columns>
+                    <TableColumn fx:id="colsupplierid" prefWidth="200.0"
+                                 text="Supplier ID"/>
+                    <TableColumn fx:id="colname" prefWidth="260.0"
+                                 text="Name"/>
+                    <TableColumn fx:id="coladdress" prefWidth="350.0"
+                                 text="Address"/>
+                    <TableColumn fx:id="colcontact" prefWidth="200.0"
+                                 text="Contact"/>
+                </columns>
+            </TableView>
+        </children>
+    </Pane>
 
 </AnchorPane>

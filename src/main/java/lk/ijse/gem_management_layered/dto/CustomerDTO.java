@@ -1,6 +1,7 @@
 package lk.ijse.gem_management_layered.dto;
 
 public class CustomerDTO {
+
     private int id;
     private String firstName;
     private String lastName;
@@ -19,7 +20,7 @@ public class CustomerDTO {
         this.contact = contact;
     }
 
-    public CustomerDTO() {}
+    public CustomerDTO(){}
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
