@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.Tooltip?>
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1014.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gem_management.Controller.GemController">
+
+    <!-- Header -->
+    <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1014.0" style="-fx-background-color: #8e061b;">
+        <children>
+            <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="GEM" wrappingWidth="79.0">
+                <font>
+                    <Font name="System Bold" size="35.0" />
+                </font>
+            </Text>
+        </children>
+    </VBox>
+
+    <!-- Input Form Pane -->
+    <Pane layoutY="50.0" prefHeight="286.0" prefWidth="1013.0" style="-fx-background-color: #000000;">
+        <children>
+            <!-- Background Images -->
+            <ImageView fitHeight="286.0" fitWidth="470.0" layoutX="14.0" opacity="0.2" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@GemImages/WhatsApp%20Image%202025-12-23%20at%2000.51.10.jpeg" />
+                </image>
+            </ImageView>
+            <ImageView fitHeight="275.0" fitWidth="444.0" layoutX="566.0" layoutY="6.0" opacity="0.17" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@GemImages/WhatsApp%20Image%202025-12-23%20at%2000.51.10.jpeg" />
+                </image>
+            </ImageView>
+
+            <!-- Input Fields -->
+            <VBox layoutX="26.0" layoutY="14.0" spacing="5"><Label text="Gem_ID :" textFill="WHITESMOKE"><font><Font name="System Bold" size="16.0" /></font></Label>
+                <TextField fx:id="gemid" onKeyPressed="#searchGem" prefWidth="335.0" />
+            </VBox>
+
+            <VBox layoutX="26.0" layoutY="105.0" spacing="5"><Label text="Gem_Name :" textFill="WHITESMOKE"><font><Font name="System Bold" size="16.0" /></font></Label>
+                <TextField fx:id="gemname" prefWidth="335.0" />
+            </VBox>
+
+            <VBox layoutX="551.0" layoutY="14.0" spacing="5"><Label text="Type :" textFill="WHITESMOKE"><font><Font name="System Bold" size="16.0" /></font></Label>
+                <TextField fx:id="type" prefWidth="335.0" />
+            </VBox>
+
+
+            <!-- Buttons -->
+            <HBox alignment="CENTER" layoutX="369.0" layoutY="200.0" spacing="10">
+                <children>
+
+                    <!-- Gem Report Button -->
+                    <Button onAction="#gemReport" prefHeight="36.0" prefWidth="111.0"
+                            style="-fx-background-color:#6A1B9A; -fx-font-weight: bold;" text="Gem Report" textFill="WHITE">
+                        <tooltip>
+                            <Tooltip text="Generate Gem Report"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #7B1FA2, #4A148C);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #4A148C;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Save Button -->
+                    <Button onAction="#gemSave" prefHeight="36.0" prefWidth="115.0"
+                            style="-fx-background-color: #2E7D32;-fx-font-weight: bold;" text="Save" textFill="WHITESMOKE">
+                        <tooltip>
+                            <Tooltip text="Save Gem Details"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #43A047, #1B5E20);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #1B5E20;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Update Button -->
+                    <Button onAction="#gemUpdate" prefHeight="36.0" prefWidth="115.0"
+                            style="-fx-background-color: #1976D2; -fx-font-weight: bold;" text="Update" textFill="WHITESMOKE">
+                        <tooltip>
+                            <Tooltip text="Update Gem Details"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #2196F3, #0D47A1);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #0D47A1;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Delete Button -->
+                    <Button onAction="#gemDelete" prefHeight="36.0" prefWidth="115.0"
+                            style="-fx-background-color: #8e061b; -fx-font-weight: bold;" text="Delete" textFill="WHITESMOKE">
+                        <tooltip>
+                            <Tooltip text="Delete Gem Record"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #B71C1C, #7F0000);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #7F0000;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                    <!-- Reset Button -->
+                    <Button onAction="#gemReset" prefHeight="36.0" prefWidth="115.0"
+                            style="-fx-background-color: orange; -fx-font-weight: bold;" text="Reset" textFill="WHITESMOKE">
+                        <tooltip>
+                            <Tooltip text="Reset All Fields"
+                                     style="
+                             -fx-background-color: linear-gradient(to bottom, #FFA726, #F57C00);
+                             -fx-text-fill: white;
+                             -fx-font-size: 12px;
+                             -fx-font-weight: bold;
+                             -fx-padding: 6 10;
+                             -fx-background-radius: 6;
+                             -fx-border-radius: 6;
+                             -fx-border-color: #F57C00;
+                             -fx-border-width: 1.5;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
+                         "/>
+                        </tooltip>
+                    </Button>
+
+                </children>
+            </HBox>
+
+        </children>
+    </Pane>
+
+    <!-- TableView Pane -->
+    <Pane layoutY="335.0" prefHeight="367.0" prefWidth="1013.0" style="-fx-background-color: #000000;">
+        <children>
+            <ImageView fitHeight="367.0" fitWidth="654.0" layoutX="351.0" opacity="0.15" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@GemImages/1182460-3840x2160-desktop-4k-gemstone-background-photo.jpg" />
+                </image>
+            </ImageView>
+
+            <TableView fx:id="tablegem" opacity="0.42" prefHeight="367.0" prefWidth="1013.0">
+                <columns>
+                    <TableColumn fx:id="colgemid" prefWidth="250.0" text="Gem_ID" />
+                    <TableColumn fx:id="colgemname" prefWidth="350.0" text="Gem_Name" />
+                    <TableColumn fx:id="coltype" prefWidth="413.0" text="Type" />
+                </columns>
+            </TableView>
+        </children>
+    </Pane>
+
+</AnchorPane>
