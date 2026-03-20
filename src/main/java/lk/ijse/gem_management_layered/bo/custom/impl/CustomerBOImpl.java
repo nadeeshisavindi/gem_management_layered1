@@ -22,6 +22,15 @@ public class CustomerBOImpl implements CustomerBO {
                 new Customer(dto.getFirstName(),dto.getLastName(),dto.getContact())
         );
     }
+    @Override
+    public boolean updateCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException {
+        return customerDAO.update(new Customer(
+                dto.getId(),
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getContact()
+        ));
+    }
 
     @Override
     public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
@@ -48,6 +57,7 @@ public class CustomerBOImpl implements CustomerBO {
 
         return list;
     }
+
 
     @Override
     public CustomerDTO searchCustomer(String text) {

@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
@@ -49,13 +48,16 @@
                     </image>
                 </ImageView>
 
+
+
+
                 <!-- Sale ID -->
                 <VBox layoutX="51.0" layoutY="29.0" prefHeight="47.0" prefWidth="294.0">
                     <children>
                         <Label text="Sale_ID :" textFill="WHITESMOKE">
                             <font><Font name="System Bold" size="16.0" /></font>
                         </Label>
-                        <TextField fx:id="saleid" onKeyPressed="#searchSale" />
+                        <TextField fx:id="txtSaleId" onKeyPressed="#searchSale" />
                     </children>
                 </VBox>
 
@@ -65,7 +67,7 @@
                         <Label text="Order_ID :" textFill="WHITESMOKE">
                             <font><Font name="System Bold" size="16.0" /></font>
                         </Label>
-                        <TextField fx:id="orderid" />
+                        <TextField fx:id="txtOrderId" />
                     </children>
                 </VBox>
 
@@ -75,7 +77,7 @@
                         <Label text="Customer Name :" textFill="WHITESMOKE">
                             <font><Font name="System Bold" size="16.0" /></font>
                         </Label>
-                        <TextField fx:id="customerName" />
+                        <TextField fx:id="txtCustomerName" />
                     </children>
                 </VBox>
 
@@ -85,36 +87,42 @@
                         <Label text="Order Status :" textFill="WHITESMOKE">
                             <font><Font name="System Bold" size="16.0" /></font>
                         </Label>
-                        <ComboBox fx:id="orderStatus" prefWidth="200.0" />
+                        <ComboBox fx:id="cmbOrderStatus" prefWidth="200.0" />
                     </children>
                 </VBox>
+
+
+
+
+
+
 
                 <!-- Buttons -->
                 <HBox alignment="CENTER" layoutX="454.0" layoutY="153.0" prefHeight="100.0" prefWidth="525.0" spacing="10">
                     <children>
 
-                        <Button mnemonicParsing="false" onAction="#saleSave" prefHeight="35.0" prefWidth="103.0"
+                        <Button mnemonicParsing="false" onAction="#saveSale" prefHeight="35.0" prefWidth="103.0"
                                 style="-fx-background-color: #2E7D32; -fx-text-fill: white;-fx-font-weight: bold;" text="Save">
                             <tooltip>
                                 <Tooltip text="Save Order Details" />
                             </tooltip>
                         </Button>
 
-                        <Button mnemonicParsing="false" onAction="#saleUpdate" prefHeight="35.0" prefWidth="103.0"
+                        <Button mnemonicParsing="false" onAction="#updateSale" prefHeight="35.0" prefWidth="103.0"
                                 style="-fx-background-color: #1976D2; -fx-text-fill: white;-fx-font-weight: bold;" text="Update">
                             <tooltip>
                                 <Tooltip text="Update Order Details" />
                             </tooltip>
                         </Button>
 
-                        <Button mnemonicParsing="false" onAction="#saleDelete" prefHeight="35.0" prefWidth="103.0"
+                        <Button mnemonicParsing="false" onAction="#deleteSale" prefHeight="35.0" prefWidth="103.0"
                                 style="-fx-background-color: #8e061b; -fx-text-fill: white;-fx-font-weight: bold;" text="Delete">
                             <tooltip>
                                 <Tooltip text="Delete Order Record" />
                             </tooltip>
                         </Button>
 
-                        <Button mnemonicParsing="false" onAction="#saleReset" prefHeight="35.0" prefWidth="103.0"
+                        <Button mnemonicParsing="false" onAction="#resetSale" prefHeight="35.0" prefWidth="103.0"
                                 style="-fx-background-color: orange; -fx-text-fill: white;-fx-font-weight: bold;" text="Reset">
                             <tooltip>
                                 <Tooltip text="Reset All Fields" />
@@ -127,6 +135,9 @@
             </children>
         </Pane>
 
+
+
+
         <!-- TableView Pane -->
         <Pane layoutY="336.0" prefHeight="367.0" prefWidth="1014.0" style="-fx-background-color: #000000;">
             <children>
@@ -135,12 +146,12 @@
                         <Image url="@GemImages/1182460-3840x2160-desktop-4k-gemstone-background-photo.jpg" />
                     </image>
                 </ImageView>
-                <TableView fx:id="tablesales" opacity="0.42" prefHeight="367.0" prefWidth="1014.0">
+                <TableView fx:id="tableSales" opacity="0.42" prefHeight="367.0" prefWidth="1014.0">
                     <columns>
-                        <TableColumn fx:id="colsaleid" prefWidth="165.0" text="Sale_ID" />
-                        <TableColumn fx:id="colorderid" prefWidth="165.0" text="Order_ID" />
-                        <TableColumn fx:id="colcustomerName" prefWidth="340.0" text="Customer Name" />
-                        <TableColumn fx:id="colorderStatus" prefWidth="340.0" text="Order Status" />
+                        <TableColumn fx:id="colSaleId" prefWidth="165.0" text="Sale_ID" />
+                        <TableColumn fx:id="colOrderId" prefWidth="165.0" text="Order_ID" />
+                        <TableColumn fx:id="colCustomerName" prefWidth="340.0" text="Customer Name" />
+                        <TableColumn fx:id="colOrderStatus" prefWidth="340.0" text="Order Status" />
                     </columns>
                 </TableView>
             </children>

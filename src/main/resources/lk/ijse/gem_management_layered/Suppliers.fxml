@@ -52,12 +52,15 @@
                 </image>
             </ImageView>
 
+
+
+
             <!-- Supplier ID -->
             <VBox layoutX="26.0" layoutY="14.0" spacing="5">
                 <Label text="Supplier ID :" textFill="WHITESMOKE">
                     <font><Font size="16.0"/></font>
                 </Label>
-                <TextField fx:id="supplierid" prefWidth="335.0"
+                <TextField fx:id="txtSupplierId" prefWidth="335.0"
                            onKeyPressed="#searchSupplier"/>
             </VBox>
 
@@ -66,7 +69,7 @@
                 <Label text="Name :" textFill="WHITESMOKE">
                     <font><Font size="16.0"/></font>
                 </Label>
-                <TextField fx:id="name" prefWidth="335.0"/>
+                <TextField fx:id="txtName" prefWidth="335.0"/>
             </VBox>
 
             <!-- Address -->
@@ -74,7 +77,7 @@
                 <Label text="Address :" textFill="WHITESMOKE">
                     <font><Font size="16.0"/></font>
                 </Label>
-                <TextField fx:id="address" prefWidth="335.0"/>
+                <TextField fx:id="txtAddress" prefWidth="335.0"/>
             </VBox>
 
             <!-- Contact -->
@@ -82,8 +85,13 @@
                 <Label text="Contact :" textFill="WHITESMOKE">
                     <font><Font size="16.0"/></font>
                 </Label>
-                <TextField fx:id="contact" prefWidth="335.0"/>
+                <TextField fx:id="txtContact" prefWidth="335.0"/>
             </VBox>
+
+
+
+
+
 
             <!-- Buttons -->
             <HBox alignment="CENTER" layoutX="382.0" layoutY="182.0" prefHeight="55.0" prefWidth="614.0" spacing="12">
@@ -175,6 +183,11 @@
         </children>
     </Pane>
 
+
+
+
+
+
     <!-- Table Pane -->
     <Pane layoutY="335.0" prefHeight="365.0" prefWidth="1014.0"
           style="-fx-background-color: #000000;">
@@ -186,15 +199,18 @@
                 </image>
             </ImageView>
 
-            <TableView fx:id="tablesupplier" prefHeight="365.0" prefWidth="1014.0" opacity="0.42">
+
+
+
+            <TableView fx:id="tableSupplier" prefHeight="365.0" prefWidth="1014.0" opacity="0.42">
                 <columns>
-                    <TableColumn fx:id="colsupplierid" prefWidth="200.0"
+                    <TableColumn fx:id="colSupplierId" prefWidth="200.0"
                                  text="Supplier ID"/>
-                    <TableColumn fx:id="colname" prefWidth="260.0"
+                    <TableColumn fx:id="colName" prefWidth="260.0"
                                  text="Name"/>
-                    <TableColumn fx:id="coladdress" prefWidth="350.0"
+                    <TableColumn fx:id="colAddress" prefWidth="350.0"
                                  text="Address"/>
-                    <TableColumn fx:id="colcontact" prefWidth="200.0"
+                    <TableColumn fx:id="colContact" prefWidth="200.0"
                                  text="Contact"/>
                 </columns>
             </TableView>

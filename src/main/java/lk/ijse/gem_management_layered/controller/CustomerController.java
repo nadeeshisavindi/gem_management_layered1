@@ -26,6 +26,7 @@ public class CustomerController {
     @FXML private TableColumn<CustomerDTO,String> colLastName;
     @FXML private TableColumn<CustomerDTO,String> colContact;
 
+    // loos cupl
     private final CustomerBO customerBO =
             (CustomerBO) BOFactory.getInstance().getBO(BOFactory.BOType.CUSTOMER);
 
@@ -44,7 +45,7 @@ public class CustomerController {
         setTableClickListener();
     }
 
-    // ------------------- BUTTON ACTIONS -------------------
+    // BUTTON
 
     @FXML
     public void saveCustomer(ActionEvent event) {
@@ -59,6 +60,35 @@ public class CustomerController {
 
             if(customerBO.saveCustomer(dto)){
                 showAlert(Alert.AlertType.INFORMATION,"Customer Saved Successfully!");
+                clearFields();
+                loadCustomerTable();
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR,e.getMessage());
+        }
+    }
+
+    @FXML
+    public void updateCustomer(ActionEvent event) {
+        try {
+            if(txtCustomerId.getText().isEmpty() || !txtCustomerId.getText().matches("\\d+")){
+                showAlert(Alert.AlertType.ERROR,"Valid Customer ID required");
+                txtCustomerId.requestFocus();
+                return;
+            }
+
+            if(!isValidForSave()) return;
+
+            CustomerDTO dto = new CustomerDTO(
+                    Integer.parseInt(txtCustomerId.getText()),
+                    txtCustomerFirstName.getText().trim(),
+                    txtCustomerLastName.getText().trim(),
+                    txtCustomerContact.getText().trim()
+            );
+
+            if(customerBO.updateCustomer(dto)){
+                showAlert(Alert.AlertType.INFORMATION,"Customer Updated Successfully!");
                 clearFields();
                 loadCustomerTable();
             }
@@ -108,7 +138,7 @@ public class CustomerController {
         }
     }
 
-    // ----------------- UTIL METHODS -------------------
+
 
     private void loadCustomerTable(){
         try {
@@ -142,7 +172,7 @@ public class CustomerController {
         });
     }
 
-    // ----------------- VALIDATION -------------------
+    // VALIDATION
 
     private boolean isValidForSave(){
 

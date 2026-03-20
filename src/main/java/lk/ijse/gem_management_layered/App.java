@@ -16,7 +16,7 @@ import java.io.IOException;
         @Override
         public void start(Stage stage) throws IOException {
 
-            scene = new Scene(loadFXML("Login_Page"));
+            scene = new Scene(loadFXML("Dashboard"));
 
             stage.setScene(scene);
             stage.setTitle("Gem Management System");

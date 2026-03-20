@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lk.ijse.gem_management_layered.bo.BOFactory;
+import lk.ijse.gem_management_layered.bo.custom.GemBO;
 import lk.ijse.gem_management_layered.bo.custom.StockBO;
 import lk.ijse.gem_management_layered.dto.GemDTO;
 import lk.ijse.gem_management_layered.dto.StockDTO;
@@ -19,35 +20,59 @@ import java.util.List;
 public class StockController {
 
     @FXML private TextField txtStockId;
+    @FXML private TextField txtGemId;
+
     @FXML private TextField txtQuantity;
     @FXML private DatePicker dpDate;
-    @FXML private ComboBox<GemDTO> cmbGem;
+    @FXML private ComboBox<String> cmbGem;
 
+
+    @FXML private TableColumn<StockDTO, String> colGemName;
     @FXML private TableView<StockDTO> tableStock;
     @FXML private TableColumn<StockDTO, Integer> colStockId;
-    @FXML private TableColumn<StockDTO, Integer> colGemId;
+    @FXML private TableColumn<StockDTO, String> colGemId;   // will show gem name
     @FXML private TableColumn<StockDTO, Integer> colQuantity;
     @FXML private TableColumn<StockDTO, LocalDate> colDate;
 
-    private final StockBO stockBO = (StockBO) BOFactory.getInstance().getBO(BOFactory.BOType.STOCK);
+    private final StockBO stockBO =
+            (StockBO) BOFactory.getInstance().getBO(BOFactory.BOType.STOCK);
+    private final GemBO gemBO =
+            (GemBO) BOFactory.getInstance().getBO(BOFactory.BOType.GEM);
+
+    // Map gem name → gem id
+    private final java.util.Map<String, Integer> gemMap = new java.util.HashMap<>();
 
     @FXML
     public void initialize() {
         colStockId.setCellValueFactory(new PropertyValueFactory<>("stockId"));
-        colGemId.setCellValueFactory(new PropertyValueFactory<>("gemId"));
+        colGemId.setCellValueFactory(new PropertyValueFactory<>("gemId"));       // ← ADD
+        colGemName.setCellValueFactory(new PropertyValueFactory<>("gemName"));   // ← ADD
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
 
+        loadGems();
         loadStockTable();
         tableClick();
+    }
+    private void loadGems() {
+        try {
+            gemMap.clear();
+            List<GemDTO> list = gemBO.getAllGems();
+            for (GemDTO g : list) {
+                gemMap.put(g.getGemName(), g.getGemId());
+            }
+            cmbGem.setItems(FXCollections.observableArrayList(gemMap.keySet()));
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
+        }
     }
 
     @FXML
     public void saveStock(ActionEvent event) {
         try {
             if (!isValid()) return;
-            GemDTO gem = cmbGem.getSelectionModel().getSelectedItem();
-            StockDTO dto = new StockDTO(gem.getGemId(), Integer.parseInt(txtQuantity.getText()), dpDate.getValue());
+            int gemId = gemMap.get(cmbGem.getValue());
+            StockDTO dto = new StockDTO(gemId, Integer.parseInt(txtQuantity.getText()), dpDate.getValue());
             if (stockBO.saveStock(dto)) {
                 showAlert(Alert.AlertType.INFORMATION, "Stock Saved!");
                 clearFields();
@@ -62,8 +87,13 @@ public class StockController {
     public void updateStock(ActionEvent event) {
         try {
             if (!isValid() || txtStockId.getText().isEmpty()) return;
-            GemDTO gem = cmbGem.getSelectionModel().getSelectedItem();
-            StockDTO dto = new StockDTO(Integer.parseInt(txtStockId.getText()), gem.getGemId(), Integer.parseInt(txtQuantity.getText()), dpDate.getValue());
+            int gemId = gemMap.get(cmbGem.getValue());
+            StockDTO dto = new StockDTO(
+                    Integer.parseInt(txtStockId.getText()),
+                    gemId,
+                    Integer.parseInt(txtQuantity.getText()),
+                    dpDate.getValue()
+            );
             if (stockBO.updateStock(dto)) {
                 showAlert(Alert.AlertType.INFORMATION, "Stock Updated!");
                 clearFields();
@@ -101,7 +131,7 @@ public class StockController {
                 if (dto != null) {
                     txtQuantity.setText(String.valueOf(dto.getQuantity()));
                     dpDate.setValue(dto.getDate());
-                    // Gem selection handled outside if needed
+                    cmbGem.setValue(dto.getGemName());
                 } else {
                     showAlert(Alert.AlertType.INFORMATION, "Stock Not Found!");
                 }
@@ -127,14 +157,22 @@ public class StockController {
                 txtStockId.setText(String.valueOf(dto.getStockId()));
                 txtQuantity.setText(String.valueOf(dto.getQuantity()));
                 dpDate.setValue(dto.getDate());
+                cmbGem.setValue(dto.getGemName());
+                txtGemId.setText(String.valueOf(dto.getGemId()));
             }
         });
     }
 
     private boolean isValid() {
-        if (txtQuantity.getText().isEmpty() || !txtQuantity.getText().matches("\\d+")) return false;
-        if (dpDate.getValue() == null) return false;
-        if (cmbGem.getSelectionModel().getSelectedItem() == null) return false;
+        if (cmbGem.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Select a gem"); return false;
+        }
+        if (txtQuantity.getText().isEmpty() || !txtQuantity.getText().matches("\\d+")) {
+            showAlert(Alert.AlertType.ERROR, "Enter valid quantity"); return false;
+        }
+        if (dpDate.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Select a date"); return false;
+        }
         return true;
     }
 

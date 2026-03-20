@@ -27,7 +27,7 @@ public class BOFactory {
         USER
     }
 
-    // Return BO instance based on type
+    //  depedencyinject
     public Object getBO(BOType type){
         switch (type){
             case GEM:
@@ -44,6 +44,8 @@ public class BOFactory {
                 return new StockBOImpl();
             case SUPPLIERS:
                 return new SuppliersBOImpl();
+            case USER:
+                return new UserBOImpl();
 
             default:
                 return null;

@@ -13,28 +13,23 @@ public class Gem_CutterDAOImpl implements Gem_CutterDAO {
 
     @Override
     public List<Gem_Cutter> getAll() throws SQLException, ClassNotFoundException {
-
-        ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM Gem_Cutters");
-
+        ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM gem_cutter");
         List<Gem_Cutter> list = new ArrayList<>();
-
-        while(rs.next()){
+        while (rs.next()) {
             list.add(new Gem_Cutter(
                     rs.getInt("cutter_id"),
-                    rs.getString("name"),
-                    rs.getInt("contact"),
+                    rs.getString("cutter_name"),
+                    rs.getString("contact"),
                     rs.getString("address")
             ));
         }
-
         return list;
     }
 
     @Override
     public boolean save(Gem_Cutter entity) throws SQLException, ClassNotFoundException {
-
         return CRUDUtill.execute(
-                "INSERT INTO Gem_Cutters(name,contact,address) VALUES (?,?,?)",
+                "INSERT INTO gem_cutter(cutter_name, contact, address) VALUES (?, ?, ?)",
                 entity.getCutterName(),
                 entity.getContact(),
                 entity.getAddress()
@@ -43,9 +38,8 @@ public class Gem_CutterDAOImpl implements Gem_CutterDAO {
 
     @Override
     public boolean update(Gem_Cutter entity) throws SQLException, ClassNotFoundException {
-
         return CRUDUtill.execute(
-                "UPDATE Gem_Cutters SET name=?,contact=?,address=? WHERE cutter_id=?",
+                "UPDATE gem_cutter SET cutter_name=?, contact=?, address=? WHERE cutter_id=?",
                 entity.getCutterName(),
                 entity.getContact(),
                 entity.getAddress(),
@@ -55,30 +49,26 @@ public class Gem_CutterDAOImpl implements Gem_CutterDAO {
 
     @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
-
         return CRUDUtill.execute(
-                "DELETE FROM Gem_Cutters WHERE cutter_id=?",
+                "DELETE FROM gem_cutter WHERE cutter_id=?",
                 Integer.parseInt(id)
         );
     }
 
     @Override
     public Gem_Cutter search(String id) throws SQLException, ClassNotFoundException {
-
         ResultSet rs = CRUDUtill.executeQuery(
-                "SELECT * FROM Gem_Cutters WHERE cutter_id=?",
+                "SELECT * FROM gem_cutter WHERE cutter_id=?",
                 Integer.parseInt(id)
         );
-
-        if(rs.next()){
+        if (rs.next()) {
             return new Gem_Cutter(
                     rs.getInt("cutter_id"),
-                    rs.getString("name"),
-                    rs.getInt("contact"),
+                    rs.getString("cutter_name"),
+                    rs.getString("contact"),
                     rs.getString("address")
             );
         }
-
         return null;
     }
 }

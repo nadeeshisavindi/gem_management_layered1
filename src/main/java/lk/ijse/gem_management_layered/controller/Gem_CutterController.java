@@ -21,10 +21,10 @@ public class Gem_CutterController {
     @FXML private TextArea address;
 
     @FXML private TableView<Gem_CutterDTO> tableCutter;
-    @FXML private TableColumn<Gem_CutterDTO,Integer> colCutterId;
-    @FXML private TableColumn<Gem_CutterDTO,String> colName;
-    @FXML private TableColumn<Gem_CutterDTO,Integer> colContact;
-    @FXML private TableColumn<Gem_CutterDTO,String> colAddress;
+    @FXML private TableColumn<Gem_CutterDTO, Integer> colCutterId;
+    @FXML private TableColumn<Gem_CutterDTO, String> colName;
+    @FXML private TableColumn<Gem_CutterDTO, String> colContact;  // ← String not Integer
+    @FXML private TableColumn<Gem_CutterDTO, String> colAddress;
 
     private final Gem_CutterBO gemCutterBO =
             (Gem_CutterBO) BOFactory.getInstance().getBO(BOFactory.BOType.GEM_CUTTER);
@@ -36,7 +36,7 @@ public class Gem_CutterController {
         colName.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getCutterName()));
         colContact.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getContact()).asObject());
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getContact())); // ← String
         colAddress.setCellValueFactory(cellData ->
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getAddress()));
 
@@ -47,156 +47,156 @@ public class Gem_CutterController {
     @FXML
     void saveCutter(ActionEvent event) {
         try {
-            if(!isValidForSave()) return;
+            if (!isValidForSave()) return;
 
             Gem_CutterDTO dto = new Gem_CutterDTO(
-                    cutterName.getText().trim(),
-                    Integer.parseInt(contact.getText()),
-                    address.getText().trim()
+                    cutterName.getText(),
+                    contact.getText(),   // ← no parseInt
+                    address.getText()
             );
 
-            if(gemCutterBO.saveCutter(dto)){
-                showAlert(Alert.AlertType.INFORMATION,"Cutter Saved Successfully!");
+            if (gemCutterBO.saveCutter(dto)) {
+                showAlert(Alert.AlertType.INFORMATION, "Cutter Saved Successfully!");
                 clearFields();
                 loadCutterTable();
             }
 
         } catch (SQLException | ClassNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR,e.getMessage());
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
         }
     }
 
     @FXML
     void updateCutter(ActionEvent event) {
         try {
-            if(!isValidForUpdate()) return;
+            if (!isValidForUpdate()) return;
 
             Gem_CutterDTO dto = new Gem_CutterDTO(
                     Integer.parseInt(cutterId.getText()),
-                    cutterName.getText().trim(),
-                    Integer.parseInt(contact.getText()),
-                    address.getText().trim()
+                    cutterName.getText(),
+                    contact.getText(),   // ← no parseInt
+                    address.getText()
             );
 
-            if(gemCutterBO.updateCutter(dto)){
-                showAlert(Alert.AlertType.INFORMATION,"Cutter Updated Successfully!");
+            if (gemCutterBO.updateCutter(dto)) {
+                showAlert(Alert.AlertType.INFORMATION, "Cutter Updated Successfully!");
                 clearFields();
                 loadCutterTable();
             }
 
         } catch (SQLException | ClassNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR,e.getMessage());
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
         }
     }
 
     @FXML
-    void deleteCutter(ActionEvent event) {
+    public void deleteCutter(ActionEvent event) {
         try {
-            if(cutterId.getText().isEmpty() || !cutterId.getText().matches("\\d+")){
-                showAlert(Alert.AlertType.ERROR,"Enter a valid Cutter ID");
-                cutterId.requestFocus();
+            if (cutterId.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Enter a Cutter ID");
                 return;
             }
-
-            if(gemCutterBO.deleteCutter(cutterId.getText())){
-                showAlert(Alert.AlertType.INFORMATION,"Cutter Deleted Successfully!");
+            if (gemCutterBO.deleteCutter(cutterId.getText())) {
+                showAlert(Alert.AlertType.INFORMATION, "Gem Cutter Deleted!");
                 clearFields();
                 loadCutterTable();
             }
-
-        } catch (SQLException | ClassNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR,e.getMessage());
+        } catch (SQLException e) {
+            if (e.getMessage().contains("foreign key constraint")) {
+                showAlert(Alert.AlertType.ERROR,
+                        "Cannot delete — this gem cutter has existing orders. Delete the orders first.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, e.getMessage());
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    public void resetCutter(ActionEvent event) {
+        clearFields();
     }
 
     @FXML
     void searchCutter(KeyEvent event) {
-        if(event.getCode() == KeyCode.ENTER){
+        if (event.getCode() == KeyCode.ENTER) {
             try {
-                if(cutterId.getText().isEmpty() || !cutterId.getText().matches("\\d+")){
-                    showAlert(Alert.AlertType.ERROR,"Enter a valid Cutter ID");
+                if (cutterId.getText().isEmpty() || !cutterId.getText().matches("\\d+")) {
+                    showAlert(Alert.AlertType.ERROR, "Enter a valid Cutter ID");
                     return;
                 }
-
                 Gem_CutterDTO dto = gemCutterBO.searchCutter(cutterId.getText());
-                if(dto != null){
+                if (dto != null) {
                     cutterName.setText(dto.getCutterName());
-                    contact.setText(String.valueOf(dto.getContact()));
+                    contact.setText(dto.getContact());  // ← no String.valueOf
                     address.setText(dto.getAddress());
                 } else {
-                    showAlert(Alert.AlertType.INFORMATION,"Cutter Not Found!");
+                    showAlert(Alert.AlertType.INFORMATION, "Cutter Not Found!");
                 }
-
             } catch (SQLException | ClassNotFoundException e) {
-                showAlert(Alert.AlertType.ERROR,e.getMessage());
+                showAlert(Alert.AlertType.ERROR, e.getMessage());
             }
         }
     }
 
-    // ----------------- UTIL METHODS -------------------
-
-    private void loadCutterTable(){
+    private void loadCutterTable() {
         try {
             List<Gem_CutterDTO> list = gemCutterBO.getAllCutters();
             tableCutter.setItems(FXCollections.observableArrayList(list));
         } catch (SQLException | ClassNotFoundException e) {
-            showAlert(Alert.AlertType.ERROR,e.getMessage());
+            showAlert(Alert.AlertType.ERROR, e.getMessage());
         }
     }
 
-    private void clearFields(){
+    private void clearFields() {
         cutterId.clear();
         cutterName.clear();
         contact.clear();
         address.clear();
     }
 
-    private void showAlert(Alert.AlertType type, String msg){
-        new Alert(type,msg).showAndWait();
+    private void showAlert(Alert.AlertType type, String msg) {
+        new Alert(type, msg).showAndWait();
     }
 
-    private void setTableClickListener(){
+    private void setTableClickListener() {
         tableCutter.setOnMouseClicked(event -> {
             Gem_CutterDTO dto = tableCutter.getSelectionModel().getSelectedItem();
-            if(dto != null){
+            if (dto != null) {
                 cutterId.setText(String.valueOf(dto.getCutterId()));
                 cutterName.setText(dto.getCutterName());
-                contact.setText(String.valueOf(dto.getContact()));
+                contact.setText(dto.getContact());  // ← no String.valueOf
                 address.setText(dto.getAddress());
             }
         });
     }
 
-    private boolean isValidForSave(){
-
-        if(cutterName.getText().isEmpty()){
-            showAlert(Alert.AlertType.ERROR,"Cutter name required");
+    private boolean isValidForSave() {
+        if (cutterName.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Cutter name required");
             cutterName.requestFocus();
             return false;
         }
-
-        if(contact.getText().isEmpty() || !contact.getText().matches("\\d{10}")){
-            showAlert(Alert.AlertType.ERROR,"Valid 10-digit contact required");
+        if (contact.getText().isEmpty() || !contact.getText().matches("\\d{7,10}")) {
+            showAlert(Alert.AlertType.ERROR, "Valid contact number required (7-10 digits)");
             contact.requestFocus();
             return false;
         }
-
-        if(address.getText().isEmpty() || address.getText().length() < 5){
-            showAlert(Alert.AlertType.ERROR,"Address too short");
+        if (address.getText().isEmpty() || address.getText().length() < 5) {
+            showAlert(Alert.AlertType.ERROR, "Address too short");
             address.requestFocus();
             return false;
         }
-
         return true;
     }
 
-    private boolean isValidForUpdate(){
-        if(cutterId.getText().isEmpty() || !cutterId.getText().matches("\\d+")){
-            showAlert(Alert.AlertType.ERROR,"Valid Cutter ID required");
+    private boolean isValidForUpdate() {
+        if (cutterId.getText().isEmpty() || !cutterId.getText().matches("\\d+")) {
+            showAlert(Alert.AlertType.ERROR, "Valid Cutter ID required");
             cutterId.requestFocus();
             return false;
         }
         return isValidForSave();
     }
-
 }

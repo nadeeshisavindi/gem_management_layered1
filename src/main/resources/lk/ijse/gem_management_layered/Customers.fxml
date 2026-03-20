@@ -16,7 +16,8 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.Tooltip?>
-<AnchorPane prefHeight="700.0" prefWidth="1014.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gem_management_layered.controller.CustomerController">
+<AnchorPane prefHeight="700.0" prefWidth="1014.0" xmlns="http://javafx.com/javafx/13"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gem_management_layered.controller.CustomerController">
 
     <!-- Header -->
     <VBox alignment="CENTER" prefHeight="50" prefWidth="1014" style="-fx-background-color:#8e061b;">
@@ -28,6 +29,7 @@
             </Text>
         </children>
     </VBox>
+
 
     <!-- Input Form Pane -->
     <Pane layoutY="50" prefHeight="286" prefWidth="1014" style="-fx-background-color:#000000;">
@@ -44,49 +46,51 @@
                 </image>
             </ImageView>
 
+
             <!-- Input Fields -->
-            <VBox layoutX="26" layoutY="14" spacing="5"><Label text="Customer ID:" textFill="WHITESMOKE"><font><Font size="16" /></font></Label><TextField fx:id="customerid" onKeyPressed="#searchCustomer" prefHeight="25.0" prefWidth="300.0" /></VBox>
+            <VBox layoutX="26" layoutY="14" spacing="5"><Label text="Customer ID:" textFill="WHITESMOKE"><font><Font size="16" /></font></Label><TextField fx:id="txtCustomerId" onKeyPressed="#searchCustomer" prefHeight="25.0" prefWidth="300.0" /></VBox>
 
             <VBox layoutX="26" layoutY="75" spacing="5">
                 <Label text="First Name:" textFill="WHITESMOKE"><font><Font size="16" /></font></Label>
-                <TextField fx:id="customerfirstname" prefHeight="25.0" prefWidth="300.0" />
+                <TextField fx:id="txtCustomerFirstName" prefHeight="25.0" prefWidth="300.0" />
             </VBox>
 
             <VBox layoutX="26" layoutY="137" spacing="5">
                 <Label text="Last Name:" textFill="WHITESMOKE"><font><Font size="16" /></font></Label>
-                <TextField fx:id="customerlastname" prefHeight="25.0" prefWidth="300.0" />
+                <TextField fx:id="txtCustomerLastName" prefHeight="25.0" prefWidth="300.0" />
             </VBox>
 
             <VBox layoutX="507" layoutY="14" spacing="5">
                 <Label text="Contact:" textFill="WHITESMOKE"><font><Font size="16" /></font></Label>
-                <TextField fx:id="customercontact" prefHeight="25.0" prefWidth="224.0" />
+                <TextField fx:id="txtCustomerContact" prefHeight="25.0" prefWidth="224.0" />
             </VBox>
+
 
             <!-- Buttons -->
             <HBox alignment="CENTER" layoutX="382.0" layoutY="182" prefHeight="55.0" prefWidth="614.0" spacing="10">
 
-                <!-- Customer Report Button -->
-                <Button onAction="#customerReport" prefHeight="36.0" prefWidth="111.0"
-                        style="-fx-background-color:#6A1B9A; -fx-font-weight: bold;" text="Customer Report" textFill="WHITE">
-                    <tooltip>
-                        <Tooltip text="Generate Customer Report"
-                                 style="
-                         -fx-background-color: linear-gradient(to bottom, #7B1FA2, #4A148C);
-                         -fx-text-fill: white;
-                         -fx-font-size: 12px;
-                         -fx-font-weight: bold;
-                         -fx-padding: 6 10;
-                         -fx-background-radius: 6;
-                         -fx-border-radius: 6;
-                         -fx-border-color: #4A148C;
-                         -fx-border-width: 1.5;
-                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
-                     "/>
-                    </tooltip>
-                </Button>
+<!--                &lt;!&ndash; Customer Report Button &ndash;&gt;-->
+<!--                <Button onAction="#customerReport" prefHeight="36.0" prefWidth="111.0"-->
+<!--                        style="-fx-background-color:#6A1B9A; -fx-font-weight: bold;" text="Customer Report" textFill="WHITE">-->
+<!--                    <tooltip>-->
+<!--                        <Tooltip text="Generate Customer Report"-->
+<!--                                 style="-->
+<!--                         -fx-background-color: linear-gradient(to bottom, #7B1FA2, #4A148C);-->
+<!--                         -fx-text-fill: white;-->
+<!--                         -fx-font-size: 12px;-->
+<!--                         -fx-font-weight: bold;-->
+<!--                         -fx-padding: 6 10;-->
+<!--                         -fx-background-radius: 6;-->
+<!--                         -fx-border-radius: 6;-->
+<!--                         -fx-border-color: #4A148C;-->
+<!--                         -fx-border-width: 1.5;-->
+<!--                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);-->
+<!--                     "/>-->
+<!--                    </tooltip>-->
+<!--                </Button>-->
 
                 <!-- Save Button -->
-                <Button onAction="#customersSave" prefHeight="36.0" prefWidth="111.0"
+                <Button onAction="#saveCustomer" prefHeight="36.0" prefWidth="111.0"
                         style="-fx-background-color:#2E7D32;-fx-font-weight: bold;" text="Save" textFill="WHITESMOKE">
                     <tooltip>
                         <Tooltip text="Save Customer Details"
@@ -106,7 +110,7 @@
                 </Button>
 
                 <!-- Update Button -->
-                <Button onAction="#customerUpdate" prefHeight="36.0" prefWidth="111.0"
+                <Button onAction="#updateCustomer" prefHeight="36.0" prefWidth="111.0"
                         style="-fx-background-color:#1976D2; -fx-font-weight: bold;" text="Update" textFill="WHITESMOKE">
                     <tooltip>
                         <Tooltip text="Update Customer Details"
@@ -126,7 +130,7 @@
                 </Button>
 
                 <!-- Delete Button -->
-                <Button onAction="#customerDelete" prefHeight="36.0" prefWidth="110.0"
+                <Button onAction="#deleteCustomer" prefHeight="36.0" prefWidth="110.0"
                         style="-fx-background-color:#8e061b;-fx-font-weight: bold;" text="Delete" textFill="WHITESMOKE" >
                     <tooltip>
                         <Tooltip text="Delete Customer Record"
@@ -145,25 +149,25 @@
                     </tooltip>
                 </Button>
 
-                <!-- Reset Button -->
-                <Button onAction="#customerReset" prefHeight="36.0" prefWidth="110.0"
-                        style="-fx-background-color:orange; -fx-font-weight: bold;" text="Reset" textFill="WHITESMOKE">
-                    <tooltip>
-                        <Tooltip text="Reset All Fields"
-                                 style="
-                         -fx-background-color: linear-gradient(to bottom, #FFA726, #F57C00);
-                         -fx-text-fill: white;
-                         -fx-font-size: 12px;
-                         -fx-font-weight: bold;
-                         -fx-padding: 6 10;
-                         -fx-background-radius: 6;
-                         -fx-border-radius: 6;
-                         -fx-border-color: #F57C00;
-                         -fx-border-width: 1.5;
-                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
-                     "/>
-                    </tooltip>
-                </Button>
+<!--                &lt;!&ndash; Reset Button &ndash;&gt;-->
+<!--                <Button onAction="#customerReset" prefHeight="36.0" prefWidth="110.0"-->
+<!--                        style="-fx-background-color:orange; -fx-font-weight: bold;" text="Reset" textFill="WHITESMOKE">-->
+<!--                    <tooltip>-->
+<!--                        <Tooltip text="Reset All Fields"-->
+<!--                                 style="-->
+<!--                         -fx-background-color: linear-gradient(to bottom, #FFA726, #F57C00);-->
+<!--                         -fx-text-fill: white;-->
+<!--                         -fx-font-size: 12px;-->
+<!--                         -fx-font-weight: bold;-->
+<!--                         -fx-padding: 6 10;-->
+<!--                         -fx-background-radius: 6;-->
+<!--                         -fx-border-radius: 6;-->
+<!--                         -fx-border-color: #F57C00;-->
+<!--                         -fx-border-width: 1.5;-->
+<!--                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);-->
+<!--                     "/>-->
+<!--                    </tooltip>-->
+<!--                </Button>-->
 
             </HBox>
 
@@ -179,12 +183,12 @@
                 </image>
             </ImageView>
 
-            <TableView fx:id="tablecustomer" opacity="0.49" prefHeight="367" prefWidth="1014">
+            <TableView fx:id="tableCustomer" opacity="0.49" prefHeight="367" prefWidth="1014">
                 <columns>
-                    <TableColumn fx:id="customertableid" prefWidth="250" text="ID" />
-                    <TableColumn fx:id="customertablefirstname" prefWidth="250" text="First Name" />
-                    <TableColumn fx:id="customertablelastname" prefWidth="250" text="Last Name" />
-                    <TableColumn fx:id="customertablecontact" prefWidth="264" text="Contact" />
+                    <TableColumn fx:id="colCustomerId" prefWidth="250" text="ID" />
+                    <TableColumn fx:id="colFirstName" prefWidth="250" text="First Name" />
+                    <TableColumn fx:id="colLastName" prefWidth="250" text="Last Name" />
+                    <TableColumn fx:id="colContact" prefWidth="264" text="Contact" />
                 </columns>
             </TableView>
         </children>

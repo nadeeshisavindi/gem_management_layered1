@@ -3,6 +3,12 @@ package lk.ijse.gem_management_layered.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
+import lk.ijse.gem_management_layered.db.DBConnection;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.util.HashMap;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -101,6 +107,35 @@ public class GemController {
         } catch (SQLException | ClassNotFoundException e){
             showAlert(Alert.AlertType.ERROR,e.getMessage());
         }
+    }
+
+
+    @FXML
+    public void gemReport(ActionEvent event) {
+        try {
+            // Load the report template
+            InputStream reportStream = getClass().getResourceAsStream("/lk/ijse/gem_management_layered/reports/GemReport.jrxml");
+
+            // Compile the report
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+            // Get DB connection
+            Connection connection = DBConnection.getInstance().getConnection();
+
+            // Fill the report with data
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), connection);
+
+            // Show the report in a viewer
+            JasperViewer.viewReport(jasperPrint, false);
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Report Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    public void gemReset(ActionEvent event) {
+        clearFields();
     }
 
     @FXML

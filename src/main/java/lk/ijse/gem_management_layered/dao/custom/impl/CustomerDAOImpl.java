@@ -13,12 +13,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public List<Customer> getAll() throws SQLException, ClassNotFoundException {
-
-        ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM Customers");
-
+        ResultSet rs = CRUDUtill.executeQuery("SELECT * FROM customers");  // ← fixed
         List<Customer> list = new ArrayList<>();
-
-        while(rs.next()){
+        while (rs.next()) {
             list.add(new Customer(
                     rs.getInt("id"),
                     rs.getString("first_name"),
@@ -26,51 +23,50 @@ public class CustomerDAOImpl implements CustomerDAO {
                     rs.getString("contact")
             ));
         }
-
         return list;
     }
 
     @Override
     public boolean save(Customer entity) throws SQLException, ClassNotFoundException {
-
         return CRUDUtill.execute(
-                "INSERT INTO Customers(first_name,last_name,contact) VALUES(?,?,?)",
-                entity.getFirstName(),
-                entity.getLastName(),
-                entity.getContact()
+                "INSERT INTO customers (first_name, last_name, contact) VALUES (?, ?, ?)",
+                entity.getFirstName(), entity.getLastName(), entity.getContact()
         );
     }
 
     @Override
     public boolean update(Customer entity) throws SQLException, ClassNotFoundException {
-
         return CRUDUtill.execute(
-                "UPDATE Customers SET first_name=?,last_name=?,contact=? WHERE id=?",
-                entity.getFirstName(),
-                entity.getLastName(),
-                entity.getContact(),
-                entity.getId()
+                "UPDATE customers SET first_name=?, last_name=?, contact=? WHERE id=?",
+                entity.getFirstName(), entity.getLastName(), entity.getContact(), entity.getId()
         );
     }
 
     @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
-
-        return CRUDUtill.execute(
-                "DELETE FROM Customers WHERE id=?",
-                Integer.parseInt(id)
-        );
+        return false;
     }
 
     @Override
     public Customer search(String id) throws SQLException, ClassNotFoundException {
+        return null;
+    }
 
-        ResultSet rs = CRUDUtill.executeQuery(
-                "SELECT * FROM Customers WHERE id=?",
-                Integer.parseInt(id)
+    @Override
+    public boolean delete(Integer id) throws SQLException, ClassNotFoundException {
+        return CRUDUtill.execute(
+                "DELETE FROM customers WHERE id=?",  // ← fixed
+                id
         );
+    }
 
-        if(rs.next()){
+    @Override
+    public Customer search(Integer id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = CRUDUtill.executeQuery(
+                "SELECT * FROM customers WHERE id=?",  // ← fixed
+                id
+        );
+        if (rs.next()) {
             return new Customer(
                     rs.getInt("id"),
                     rs.getString("first_name"),
@@ -78,7 +74,6 @@ public class CustomerDAOImpl implements CustomerDAO {
                     rs.getString("contact")
             );
         }
-
         return null;
     }
 }

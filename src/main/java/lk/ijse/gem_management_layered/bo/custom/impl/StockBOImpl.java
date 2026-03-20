@@ -32,7 +32,7 @@ public class StockBOImpl implements StockBO {
     @Override
     public StockDTO searchStock(String stockId) throws SQLException, ClassNotFoundException {
         Stock s = stockDAO.search(Integer.parseInt(stockId));
-        if (s != null) return new StockDTO(s.getStockId(), s.getGemId(), s.getQuantity(), s.getDate());
+        if (s != null) return new StockDTO(s.getStockId(), s.getGemId(), s.getGemName(), s.getQuantity(), s.getDate());
         return null;
     }
 
@@ -41,7 +41,7 @@ public class StockBOImpl implements StockBO {
         List<Stock> stocks = stockDAO.getAll();
         List<StockDTO> list = new ArrayList<>();
         for (Stock s : stocks) {
-            list.add(new StockDTO(s.getStockId(), s.getGemId(), s.getQuantity(), s.getDate()));
+            list.add(new StockDTO(s.getStockId(), s.getGemId(), s.getGemName(), s.getQuantity(), s.getDate()));
         }
         return list;
     }

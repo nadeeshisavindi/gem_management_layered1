@@ -2,6 +2,8 @@ module lk.ijse.gem_management_layered {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires jasperreports;
+
 
 
     opens lk.ijse.gem_management_layered to javafx.fxml;
@@ -14,6 +16,8 @@ module lk.ijse.gem_management_layered {
     opens lk.ijse.gem_management_layered.bo.custom to javafx.fxml;
     exports lk.ijse.gem_management_layered.bo.custom.impl;
     opens lk.ijse.gem_management_layered.bo.custom.impl to javafx.fxml;
+    opens lk.ijse.gem_management_layered.dto to javafx.base;
+    exports lk.ijse.gem_management_layered.dto;
 
 
 

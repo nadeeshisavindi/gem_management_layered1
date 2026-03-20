@@ -29,5 +29,11 @@ package lk.ijse.gem_management_layered.dao.custom;
 import lk.ijse.gem_management_layered.dao.CrudDAO;
 import lk.ijse.gem_management_layered.entity.Customer;
 
+import java.sql.SQLException;
+
 public interface CustomerDAO extends CrudDAO<Customer, String> {
+
+    boolean delete(Integer id) throws SQLException, ClassNotFoundException;
+
+    Customer search(Integer id) throws SQLException, ClassNotFoundException;
 }

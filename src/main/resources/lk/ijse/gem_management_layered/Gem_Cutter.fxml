@@ -1,5 +1,3 @@
-
-
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
@@ -18,7 +16,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.Tooltip?>
-<AnchorPane prefHeight="700" prefWidth="1015" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gem_management_layered.controller.Gem_CutterController">
+<AnchorPane prefHeight="700" prefWidth="1015" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gem_management_layered.controller.Gem_CutterController">
 
     <!-- Header -->
     <VBox alignment="CENTER" prefHeight="50" prefWidth="1015" style="-fx-background-color: #8e061b;">
@@ -54,7 +52,7 @@
                 <Label text="Cutter_ID :" textFill="WHITESMOKE">
                     <font><Font name="System Bold" size="16" /></font>
                 </Label>
-                <TextField fx:id="cutterid"  onKeyPressed="#searchCutter"/>
+                <TextField fx:id="cutterId"  onKeyPressed="#searchCutter"/>
             </VBox>
 
             <!-- Name -->
@@ -62,7 +60,7 @@
                 <Label text="Name :" textFill="WHITESMOKE">
                     <font><Font name="System Bold" size="16" /></font>
                 </Label>
-                <TextField fx:id="name" />
+                <TextField fx:id="cutterName" />
             </VBox>
 
             <!-- Contact -->
@@ -80,6 +78,14 @@
                 </Label>
                 <TextArea fx:id="address" prefHeight="70" />
             </VBox>
+
+
+
+
+
+
+
+
 
             <!-- Buttons -->
             <HBox layoutX="382" layoutY="182" prefHeight="55.0" prefWidth="614.0" spacing="12">
@@ -147,21 +153,10 @@
 
                     <!-- Reset Button -->
                     <Button onAction="#resetCutter" prefHeight="36.0" prefWidth="111.0"
-                            style="-fx-background-color: orange; -fx-font-weight: bold; -fx-text-fill: white;" text="Reset">
+                            style="-fx-background-color: orange; -fx-font-weight: bold;"
+                            text="Reset" textFill="WHITESMOKE">
                         <tooltip>
-                            <Tooltip text="Reset All Fields"
-                                     style="
-                             -fx-background-color: linear-gradient(to bottom, #FFA726, #F57C00);
-                             -fx-text-fill: white;
-                             -fx-font-size: 12px;
-                             -fx-font-weight: bold;
-                             -fx-padding: 6 10;
-                             -fx-background-radius: 6;
-                             -fx-border-radius: 6;
-                             -fx-border-color: #F57C00;
-                             -fx-border-width: 1.5;
-                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
-                         "/>
+                            <Tooltip text="Reset All Fields"/>
                         </tooltip>
                     </Button>
 
@@ -182,10 +177,10 @@
             </ImageView>
             <TableView fx:id="tableCutter" layoutX="0" layoutY="0" opacity="0.42" prefHeight="370" prefWidth="1015">
                 <columns>
-                    <TableColumn fx:id="colcutterid" prefWidth="150" text="Cutter_ID" />
-                    <TableColumn fx:id="colname" prefWidth="250" text="Name" />
-                    <TableColumn fx:id="coladdress" prefWidth="400" text="Address" />
-                    <TableColumn fx:id="colcontact" prefWidth="200" text="Contact" />
+                    <TableColumn fx:id="colCutterId" prefWidth="150" text="Cutter_ID" />
+                    <TableColumn fx:id="colName" prefWidth="250" text="Name" />
+                    <TableColumn fx:id="colAddress" prefWidth="400" text="Address" />
+                    <TableColumn fx:id="colContact" prefWidth="200" text="Contact" />
                 </columns>
             </TableView>
         </children>

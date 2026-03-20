@@ -72,15 +72,47 @@ import java.util.ResourceBundle;
 
         @FXML
         private void clickUserNav() throws IOException {
-            Parent fxml = App.loadFXML("User");
+            Parent fxml = App.loadFXML("Users");
             maincontent.getChildren().setAll(fxml);
         }
+
+        @FXML
+        private void clickStockNav() throws IOException {
+            Parent fxml = App.loadFXML("Stock");
+            maincontent.getChildren().setAll(fxml);
+        }
+        @FXML
+        private void clickSupplierNav() throws IOException {
+            Parent fxml = App.loadFXML("Suppliers");
+            maincontent.getChildren().setAll(fxml);
+        }
+
+        @FXML
+        private void clickGemCutterNav() throws IOException {
+            Parent fxml = App.loadFXML("Gem_Cutter");
+            maincontent.getChildren().setAll(fxml);
+        }
+
 
         @FXML
         private void clickCustomerNav() throws IOException {
             Parent fxml = App.loadFXML("Customers");
             maincontent.getChildren().setAll(fxml);
         }
+
+
+        @FXML
+        private void clickOrderNav() throws IOException {
+            Parent fxml = App.loadFXML("Orders");
+            maincontent.getChildren().setAll(fxml);
+        }
+
+        @FXML
+        private void clickSaleNav() throws IOException {
+            Parent fxml = App.loadFXML("Sales");
+            maincontent.getChildren().setAll(fxml);
+        }
+
 
         @FXML
         private void clickGemNav() throws IOException {

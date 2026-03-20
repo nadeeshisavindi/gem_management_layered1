@@ -108,7 +108,7 @@
                 <!-- Generate Report -->
                 <Button onAction="#generateReport" prefHeight="36.0" prefWidth="111.0" style="-fx-background-color:#0D47A1; -fx-text-fill:white; -fx-font-weight:bold; -fx-font-size:14px;" text="Generate Report">
                     <tooltip>
-                        <Tooltip style="                          -fx-background-color: linear-gradient(to bottom, #1E3C72, #0D47A1);                          -fx-text-fill: white;                          -fx-font-size: 12px;                          -fx-font-weight: bold;                          -fx-padding: 6 10;                          -fx-background-radius: 6;                          -fx-border-radius: 6;                          -fx-border-color: #0D47A1;                          -fx-border-width: 1.5;                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);                      " text="Generate order report" />
+                        <Tooltip style="-fx-background-color: linear-gradient(to bottom, #1E3C72, #0D47A1);                          -fx-text-fill: white;                          -fx-font-size: 12px;                          -fx-font-weight: bold;                          -fx-padding: 6 10;                          -fx-background-radius: 6;                          -fx-border-radius: 6;                          -fx-border-color: #0D47A1;                          -fx-border-width: 1.5;                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);                      " text="Generate order report" />
                     </tooltip>
                 </Button>
 

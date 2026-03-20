@@ -15,10 +15,10 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.Tooltip?>
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1014.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gem_management_layered.controller.GemController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1014.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.gem_management_layered.controller.GemController">
 
     <!-- Header -->
-    <VBox alignment="CENTER" prefHeight="50.0" prefWidth="1014.0" style="-fx-background-color: #8e061b;">
+<VBox alignment="CENTER" prefHeight="50.0" prefWidth="1014.0" style="-fx-background-color: #8e061b;">
         <children>
             <Text fill="WHITESMOKE" strokeType="OUTSIDE" strokeWidth="0.0" text="GEM" wrappingWidth="79.0">
                 <font>
@@ -43,17 +43,19 @@
                 </image>
             </ImageView>
 
+
+
             <!-- Input Fields -->
             <VBox layoutX="26.0" layoutY="14.0" spacing="5"><Label text="Gem_ID :" textFill="WHITESMOKE"><font><Font name="System Bold" size="16.0" /></font></Label>
-                <TextField fx:id="gemid" onKeyPressed="#searchGem" prefWidth="335.0" />
+                <TextField fx:id="txtGemId" onKeyPressed="#searchGem" prefWidth="335.0" />
             </VBox>
 
             <VBox layoutX="26.0" layoutY="105.0" spacing="5"><Label text="Gem_Name :" textFill="WHITESMOKE"><font><Font name="System Bold" size="16.0" /></font></Label>
-                <TextField fx:id="gemname" prefWidth="335.0" />
+                <TextField fx:id="txtGemName" prefWidth="335.0" />
             </VBox>
 
             <VBox layoutX="551.0" layoutY="14.0" spacing="5"><Label text="Type :" textFill="WHITESMOKE"><font><Font name="System Bold" size="16.0" /></font></Label>
-                <TextField fx:id="type" prefWidth="335.0" />
+                <TextField fx:id="txtType" prefWidth="335.0" />
             </VBox>
 
 
@@ -61,28 +63,14 @@
             <HBox alignment="CENTER" layoutX="369.0" layoutY="200.0" spacing="10">
                 <children>
 
-                    <!-- Gem Report Button -->
+
                     <Button onAction="#gemReport" prefHeight="36.0" prefWidth="111.0"
-                            style="-fx-background-color:#6A1B9A; -fx-font-weight: bold;" text="Gem Report" textFill="WHITE">
-                        <tooltip>
-                            <Tooltip text="Generate Gem Report"
-                                     style="
-                             -fx-background-color: linear-gradient(to bottom, #7B1FA2, #4A148C);
-                             -fx-text-fill: white;
-                             -fx-font-size: 12px;
-                             -fx-font-weight: bold;
-                             -fx-padding: 6 10;
-                             -fx-background-radius: 6;
-                             -fx-border-radius: 6;
-                             -fx-border-color: #4A148C;
-                             -fx-border-width: 1.5;
-                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
-                         "/>
-                        </tooltip>
-                    </Button>
+                            style="-fx-background-color:#6A1B9A; -fx-font-weight: bold;"
+                            text="Gem Report" textFill="WHITE"/>
+
 
                     <!-- Save Button -->
-                    <Button onAction="#gemSave" prefHeight="36.0" prefWidth="115.0"
+                    <Button onAction="#saveGem" prefHeight="36.0" prefWidth="115.0"
                             style="-fx-background-color: #2E7D32;-fx-font-weight: bold;" text="Save" textFill="WHITESMOKE">
                         <tooltip>
                             <Tooltip text="Save Gem Details"
@@ -102,7 +90,7 @@
                     </Button>
 
                     <!-- Update Button -->
-                    <Button onAction="#gemUpdate" prefHeight="36.0" prefWidth="115.0"
+                    <Button onAction="#updateGem" prefHeight="36.0" prefWidth="115.0"
                             style="-fx-background-color: #1976D2; -fx-font-weight: bold;" text="Update" textFill="WHITESMOKE">
                         <tooltip>
                             <Tooltip text="Update Gem Details"
@@ -122,7 +110,7 @@
                     </Button>
 
                     <!-- Delete Button -->
-                    <Button onAction="#gemDelete" prefHeight="36.0" prefWidth="115.0"
+                    <Button onAction="#deleteGem" prefHeight="36.0" prefWidth="115.0"
                             style="-fx-background-color: #8e061b; -fx-font-weight: bold;" text="Delete" textFill="WHITESMOKE">
                         <tooltip>
                             <Tooltip text="Delete Gem Record"
@@ -141,23 +129,11 @@
                         </tooltip>
                     </Button>
 
-                    <!-- Reset Button -->
                     <Button onAction="#gemReset" prefHeight="36.0" prefWidth="115.0"
-                            style="-fx-background-color: orange; -fx-font-weight: bold;" text="Reset" textFill="WHITESMOKE">
+                            style="-fx-background-color: orange; -fx-font-weight: bold;"
+                            text="Reset" textFill="WHITESMOKE">
                         <tooltip>
-                            <Tooltip text="Reset All Fields"
-                                     style="
-                             -fx-background-color: linear-gradient(to bottom, #FFA726, #F57C00);
-                             -fx-text-fill: white;
-                             -fx-font-size: 12px;
-                             -fx-font-weight: bold;
-                             -fx-padding: 6 10;
-                             -fx-background-radius: 6;
-                             -fx-border-radius: 6;
-                             -fx-border-color: #F57C00;
-                             -fx-border-width: 1.5;
-                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 2);
-                         "/>
+                            <Tooltip text="Reset All Fields"/>
                         </tooltip>
                     </Button>
 
@@ -176,11 +152,12 @@
                 </image>
             </ImageView>
 
-            <TableView fx:id="tablegem" opacity="0.42" prefHeight="367.0" prefWidth="1013.0">
+
+            <TableView fx:id="tableGem"  opacity="0.42" prefHeight="367.0" prefWidth="1013.0">
                 <columns>
-                    <TableColumn fx:id="colgemid" prefWidth="250.0" text="Gem_ID" />
-                    <TableColumn fx:id="colgemname" prefWidth="350.0" text="Gem_Name" />
-                    <TableColumn fx:id="coltype" prefWidth="413.0" text="Type" />
+                    <TableColumn fx:id="colGemId" text="Gem ID" prefWidth="250.0" />
+                    <TableColumn fx:id="colGemName" text="Gem Name" prefWidth="350.0" />
+                    <TableColumn fx:id="colType" text="Type" prefWidth="413.0" />
                 </columns>
             </TableView>
         </children>
